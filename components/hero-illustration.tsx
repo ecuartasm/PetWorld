@@ -1,7 +1,20 @@
+"use client";
+
+import { useState } from "react";
+
 export function HeroIllustration() {
+  const [hovering, setHovering] = useState(false);
+
   return (
     <div className="relative w-full max-w-lg mx-auto lg:mx-0" aria-hidden="true">
-      <svg viewBox="0 0 500 420" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto drop-shadow-2xl">
+      <svg
+        viewBox="0 0 500 420"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-auto drop-shadow-2xl"
+        onMouseEnter={() => setHovering(true)}
+        onMouseLeave={() => setHovering(false)}
+      >
         {/* Background circle glow */}
         <circle cx="250" cy="210" r="180" fill="url(#bgGlow)" className="animate-pulse-slow" />
 
@@ -47,6 +60,16 @@ export function HeroIllustration() {
           {/* Body */}
           <ellipse cx="200" cy="300" rx="65" ry="50" fill="#fbbf24" />
           <ellipse cx="200" cy="300" rx="65" ry="50" fill="url(#dogGradient)" />
+          {/* Tail — wags on hover */}
+          <path
+            d="M260 290 Q282 265 275 235"
+            stroke="#d97706"
+            strokeWidth="10"
+            fill="none"
+            strokeLinecap="round"
+            className={hovering ? "dog-tail-wag" : ""}
+            style={{ transformOrigin: "260px 290px" }}
+          />
           {/* Head */}
           <circle cx="155" cy="240" r="42" fill="#f59e0b" />
           <circle cx="155" cy="240" r="42" fill="url(#dogHeadGradient)" />
@@ -72,8 +95,6 @@ export function HeroIllustration() {
           <rect x="220" y="335" width="16" height="35" rx="8" fill="#f59e0b" />
           <rect x="160" y="365" width="20" height="8" rx="4" fill="#d97706" />
           <rect x="218" y="365" width="20" height="8" rx="4" fill="#d97706" />
-          {/* Tail */}
-          <path d="M265 280 Q290 250 280 220" stroke="#d97706" strokeWidth="10" fill="none" strokeLinecap="round" />
           {/* Collar */}
           <rect x="130" y="270" width="52" height="10" rx="5" fill="#ef4444" />
           <circle cx="156" cy="280" r="5" fill="#fbbf24" />
@@ -92,12 +113,13 @@ export function HeroIllustration() {
           <polygon points="315,228 323,203 333,226" fill="#f9a8d4" />
           <polygon points="348,228 358,195 370,230" fill="#9333ea" />
           <polygon points="350,226 358,203 367,228" fill="#f9a8d4" />
-          {/* Eyes */}
+          {/* Left eye */}
           <ellipse cx="327" cy="252" rx="7" ry="8" fill="#d9f99d" />
-          <ellipse cx="353" cy="252" rx="7" ry="8" fill="#d9f99d" />
           <ellipse cx="327" cy="253" rx="3" ry="6" fill="#1e293b" />
-          <ellipse cx="353" cy="253" rx="3" ry="6" fill="#1e293b" />
           <circle cx="329" cy="250" r="1.5" fill="white" />
+          {/* Right eye — fixed: added pupil */}
+          <ellipse cx="353" cy="252" rx="7" ry="8" fill="#d9f99d" />
+          <ellipse cx="353" cy="253" rx="3" ry="6" fill="#1e293b" />
           <circle cx="355" cy="250" r="1.5" fill="white" />
           {/* Nose */}
           <polygon points="337,264 340,260 343,264" fill="#f9a8d4" />
