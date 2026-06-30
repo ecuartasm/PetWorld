@@ -4,7 +4,7 @@ export const MAX_CONVERSATION_TURNS = 20;
 export const MAX_MESSAGE_LENGTH = 1000;
 
 export function getSystemPrompt(knowledgeContext: string): string {
-  return `Eres el asistente virtual de PetWorld, una plataforma digital para mascotas en Colombia que opera actualmente en Manizales.
+  return `Eres el asistente virtual de PetWorld, una plataforma digital para mascotas en Colombia.
 
 Tu rol es:
 - Responder preguntas sobre la plataforma PetWorld, sus servicios, funcionalidades y como usarla.

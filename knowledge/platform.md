@@ -6,14 +6,14 @@ PetWorld es el hogar digital de tu mascota. Una plataforma donde cada mascota co
 
 ## Donde opera PetWorld?
 
-Actualmente estamos en Manizales, Colombia. Planeamos expandirnos a otras ciudades proximamente.
+Operamos en toda Colombia.
 
 ## Que puedo hacer en PetWorld?
 
 - **Crear el perfil de mi mascota:** nombre, especie, raza, edad, fotos y un pasaporte de salud digital.
 - **Consultar informacion:** articulos y guias sobre cuidado, nutricion, salud y comportamiento de mascotas.
 - **Hablar con el asistente:** un asistente inteligente que responde preguntas sobre la plataforma y cuidado general de mascotas.
-- **Encontrar servicios (proximamente):** directorio de veterinarias, grooming, paseos, guarderia y mas en Manizales.
+- **Encontrar servicios (proximamente):** directorio de veterinarias, grooming, paseos, guarderia y mas en Colombia.
 
 ## Es gratis?
 

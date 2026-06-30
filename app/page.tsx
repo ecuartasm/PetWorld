@@ -18,7 +18,7 @@ export default function HomePage() {
             {/* Text */}
             <div className="flex-1 text-center lg:text-left animate-fade-in-up">
               <p className="inline-block rounded-full bg-gradient-to-r from-primary-100 to-pink-100 px-4 py-1.5 text-sm font-semibold text-primary-700 mb-6">
-                Manizales, Colombia
+                Colombia
               </p>
               <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
                 Donde cada{" "}
@@ -28,8 +28,7 @@ export default function HomePage() {
                 tiene su mundo
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-gray-600 sm:text-xl max-w-xl mx-auto lg:mx-0">
-                El ecosistema digital que conecta a las familias con mascotas de Manizales.
-                Perfil, salud, comunidad y servicios en un solo lugar.
+                Todo lo que tu mascota necesita, en un solo ecosistema digital.
               </p>
               <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
                 <Link
@@ -90,14 +89,14 @@ export default function HomePage() {
             <FeatureCard
               icon="🏥"
               title="Servicios veterinarios"
-              description="Directorio de veterinarias, clinicas y profesionales en Manizales con resenas reales."
+              description="Directorio de veterinarias, clínicas y profesionales en Colombia con reseñas reales."
               gradient="from-green-400 to-emerald-400"
               delay="delay-300"
             />
             <FeatureCard
               icon="🐕"
               title="Servicios para mascotas"
-              description="Grooming, paseos, guarderia, entrenamiento y mas servicios locales."
+              description="Baño, peluquería, paseos, guardería, entrenamiento y mas servicios para tu mascota."
               gradient="from-purple-400 to-violet-400"
               delay="delay-400"
             />

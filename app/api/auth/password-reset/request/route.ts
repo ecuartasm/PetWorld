@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHash, randomBytes } from "crypto";
 import { prisma } from "@/lib/db";
 import { requestPasswordResetSchema } from "@/lib/validation";
+import { logRequest, logError } from "@/lib/logger";
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,6 +10,7 @@ export async function POST(request: NextRequest) {
     const parsed = requestPasswordResetSchema.safeParse(body);
 
     if (!parsed.success) {
+      logRequest("/api/auth/password-reset/request", "POST", 400, { error: "validation_failed" });
       return NextResponse.json(
         { error: "Datos invalidos", details: parsed.error.flatten().fieldErrors },
         { status: 400 },
@@ -20,6 +22,7 @@ export async function POST(request: NextRequest) {
 
     // Always return success to prevent email enumeration
     if (!user) {
+      logRequest("/api/auth/password-reset/request", "POST", 200, { email, userFound: false });
       return NextResponse.json({
         message: "Si el correo existe, recibiras un enlace para restablecer tu contrasena.",
       });
@@ -39,10 +42,12 @@ export async function POST(request: NextRequest) {
     // In production, this would send an email
     console.log(`[DEV] Password reset link for ${email}: ${resetUrl}`);
 
+    logRequest("/api/auth/password-reset/request", "POST", 200, { email, userFound: true });
     return NextResponse.json({
       message: "Si el correo existe, recibiras un enlace para restablecer tu contrasena.",
     });
   } catch (error) {
+    logError("/api/auth/password-reset/request", "POST", error);
     console.error("Password reset request error:", error);
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 });
   }

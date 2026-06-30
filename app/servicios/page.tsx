@@ -31,7 +31,7 @@ const services = [
     icon: "🏥",
     title: "Directorio veterinario",
     description:
-      "Encuentra veterinarias, clinicas y profesionales en Manizales. Con resenas de la comunidad, horarios, ubicacion y servicios disponibles.",
+      "Encuentra veterinarias, clinicas y profesionales en Colombia. Con resenas de la comunidad, horarios, ubicacion y servicios disponibles.",
     status: "proximamente" as const,
   },
   {

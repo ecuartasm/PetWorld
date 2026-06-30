@@ -36,4 +36,4 @@ El asistente habla espanol por defecto, pero puede responder en el idioma que us
 Puedes escribirnos a hola@petworld.co para cualquier pregunta o problema.
 
 **En que ciudad opera PetWorld?**
-Actualmente operamos en Manizales, Colombia. Proximamente estaremos en mas ciudades.
+Operamos en toda Colombia.

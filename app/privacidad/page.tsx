@@ -14,7 +14,7 @@ export default function PrivacidadPage() {
         <section>
           <h2 className="text-lg font-semibold text-gray-900">1. Responsable del tratamiento</h2>
           <p className="mt-2">
-            PetWorld, con domicilio en Manizales, Colombia, es responsable del tratamiento de los datos
+            PetWorld, con domicilio en Colombia, es responsable del tratamiento de los datos
             personales recopilados a traves de esta plataforma, de conformidad con la Ley 1581 de 2012
             y el Decreto 1377 de 2013.
           </p>

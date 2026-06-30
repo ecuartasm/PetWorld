@@ -3,6 +3,7 @@ import { hash } from "argon2";
 import { prisma } from "@/lib/db";
 import { registerSchema } from "@/lib/validation";
 import { createSession } from "@/lib/auth";
+import { logRequest, logError } from "@/lib/logger";
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,6 +11,7 @@ export async function POST(request: NextRequest) {
     const parsed = registerSchema.safeParse(body);
 
     if (!parsed.success) {
+      logRequest("/api/auth/register", "POST", 400, { error: "validation_failed" });
       return NextResponse.json(
         { error: "Datos invalidos", details: parsed.error.flatten().fieldErrors },
         { status: 400 },
@@ -20,6 +22,7 @@ export async function POST(request: NextRequest) {
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
+      logRequest("/api/auth/register", "POST", 409, { email });
       return NextResponse.json(
         { error: "Ya existe una cuenta con este correo electronico" },
         { status: 409 },
@@ -41,6 +44,7 @@ export async function POST(request: NextRequest) {
 
     await createSession(user.id);
 
+    logRequest("/api/auth/register", "POST", 201, { userId: user.id });
     return NextResponse.json(
       {
         user: {
@@ -53,6 +57,7 @@ export async function POST(request: NextRequest) {
       { status: 201 },
     );
   } catch (error) {
+    logError("/api/auth/register", "POST", error);
     console.error("Registration error:", error);
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 });
   }

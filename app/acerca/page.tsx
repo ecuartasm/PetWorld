@@ -36,10 +36,10 @@ export default function AcercaPage() {
           <li><strong>Comercio:</strong> productos y accesorios de marcas locales e independientes (proximamente).</li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-gray-900 pt-4">Empezamos en Manizales</h2>
+        <h2 className="text-2xl font-semibold text-gray-900 pt-4">Hecho para Colombia</h2>
         <p>
-          Lanzamos en Manizales porque creemos en construir comunidad con densidad real antes de escalar.
-          Queremos que cada dueno de mascota en la ciudad sienta que PetWorld fue hecho para el y su companero.
+          Construimos PetWorld para las familias con mascotas de todo Colombia.
+          Queremos que cada dueno de mascota sienta que PetWorld fue hecho para el y su companero.
         </p>
 
         <h2 className="text-2xl font-semibold text-gray-900 pt-4">Nuestros valores</h2>

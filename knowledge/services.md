@@ -14,7 +14,7 @@ Informacion y guias sobre cuidado de mascotas, nutricion, salud general, comport
 ## Servicios que vienen proximamente
 
 ### Directorio veterinario
-Busca veterinarias, clinicas y profesionales en Manizales con resenas de la comunidad.
+Busca veterinarias, clinicas y profesionales en Colombia con resenas de la comunidad.
 
 ### Servicios de grooming y cuidado
 Reserva servicios de bano, peluqueria, guarderia, paseos, entrenamiento y hotel para mascotas.

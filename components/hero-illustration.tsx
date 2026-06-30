@@ -1,19 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 export function HeroIllustration() {
   const [hovering, setHovering] = useState(false);
+  const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 });
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<SVGSVGElement>) => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const rect = svg.getBoundingClientRect();
+    // Map mouse position to SVG viewBox coordinates (500x420)
+    const mx = ((e.clientX - rect.left) / rect.width) * 500;
+    const my = ((e.clientY - rect.top) / rect.height) * 420;
+    // Cat eye center is roughly (340, 252)
+    const dx = mx - 340;
+    const dy = my - 252;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const maxOffset = 3;
+    const factor = Math.min(dist, 150) / 150;
+    const ox = dist > 0 ? (dx / dist) * maxOffset * factor : 0;
+    const oy = dist > 0 ? (dy / dist) * maxOffset * factor : 0;
+    setEyeOffset({ x: ox, y: oy });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setHovering(false);
+    setEyeOffset({ x: 0, y: 0 });
+  }, []);
 
   return (
     <div className="relative w-full max-w-lg mx-auto lg:mx-0" aria-hidden="true">
       <svg
+        ref={svgRef}
         viewBox="0 0 500 420"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-auto drop-shadow-2xl"
         onMouseEnter={() => setHovering(true)}
-        onMouseLeave={() => setHovering(false)}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
       >
         {/* Background circle glow */}
         <circle cx="250" cy="210" r="180" fill="url(#bgGlow)" className="animate-pulse-slow" />
@@ -115,12 +142,12 @@ export function HeroIllustration() {
           <polygon points="350,226 358,203 367,228" fill="#f9a8d4" />
           {/* Left eye */}
           <ellipse cx="327" cy="252" rx="7" ry="8" fill="#d9f99d" />
-          <ellipse cx="327" cy="253" rx="3" ry="6" fill="#1e293b" />
-          <circle cx="329" cy="250" r="1.5" fill="white" />
-          {/* Right eye — fixed: added pupil */}
+          <ellipse cx={327 + eyeOffset.x} cy={253 + eyeOffset.y} rx="3" ry="6" fill="#1e293b" style={{ transition: "cx 0.1s, cy 0.1s" }} />
+          <circle cx={329 + eyeOffset.x} cy={250 + eyeOffset.y} r="1.5" fill="white" style={{ transition: "cx 0.1s, cy 0.1s" }} />
+          {/* Right eye */}
           <ellipse cx="353" cy="252" rx="7" ry="8" fill="#d9f99d" />
-          <ellipse cx="353" cy="253" rx="3" ry="6" fill="#1e293b" />
-          <circle cx="355" cy="250" r="1.5" fill="white" />
+          <ellipse cx={353 + eyeOffset.x} cy={253 + eyeOffset.y} rx="3" ry="6" fill="#1e293b" style={{ transition: "cx 0.1s, cy 0.1s" }} />
+          <circle cx={355 + eyeOffset.x} cy={250 + eyeOffset.y} r="1.5" fill="white" style={{ transition: "cx 0.1s, cy 0.1s" }} />
           {/* Nose */}
           <polygon points="337,264 340,260 343,264" fill="#f9a8d4" />
           {/* Whiskers */}

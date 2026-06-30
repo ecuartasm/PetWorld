@@ -19,7 +19,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-3 text-sm text-gray-600">
-              Donde cada patita tiene su mundo. Conocimiento, comunidad y servicios para las familias con mascotas de Manizales.
+              Donde cada patita tiene su mundo. Conocimiento, comunidad y servicios para las familias con mascotas de Colombia.
             </p>
           </div>
 
@@ -43,7 +43,7 @@ export function Footer() {
           <div>
             <h3 className="text-sm font-semibold text-gray-900">Contacto</h3>
             <ul className="mt-3 space-y-2">
-              <li className="text-sm text-gray-600">Manizales, Colombia</li>
+              <li className="text-sm text-gray-600">Colombia</li>
               <li><a href="mailto:hola@petworld.co" className="text-sm text-gray-600 hover:text-primary-600 transition-colors">hola@petworld.co</a></li>
             </ul>
           </div>

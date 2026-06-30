@@ -1,0 +1,2000 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Negocio de las Mascotas en Colombia y Manizales (2026)</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js desde CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #FFF8F0;
+      --color-surface: #FFFFFF;
+      --color-amber: #F59E0B;
+      --color-amber-dark: #D97706;
+      --color-amber-light: #FDE68A;
+      --color-coral: #F97316;
+      --color-coral-dark: #EA580C;
+      --color-green: #22C55E;
+      --color-green-dark: #16A34A;
+      --color-green-light: #BBF7D0;
+      --color-earth: #92400E;
+      --color-earth-light: #D4A574;
+      --color-text: #1C1917;
+      --color-text-muted: #57534E;
+      --color-text-light: #A8A29E;
+      --font: 'Poppins', system-ui, sans-serif;
+      --slide-transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--font);
+      background: var(--color-bg);
+      color: var(--color-text);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================================
+       BACKGROUND: warm gradient + cat paw prints
+       ============================================================ */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse at 15% 20%, rgba(249,115,22,0.13) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 15%, rgba(251,191,36,0.11) 0%, transparent 50%),
+        radial-gradient(ellipse at 75% 75%, rgba(34,197,94,0.09) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 85%, rgba(245,158,11,0.10) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 50%, rgba(249,115,22,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Cat paw print pattern — generated via JS canvas for random scatter */
+    #paw-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       PROGRESS BAR
+       ============================================================ */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--color-coral), var(--color-amber), var(--color-green));
+      z-index: 1000;
+      transition: width 0.4s ease;
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* ============================================================
+       SLIDE COUNTER
+       ============================================================ */
+    #slide-counter {
+      position: fixed;
+      bottom: 24px;
+      right: 32px;
+      z-index: 1000;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(8px);
+      padding: 6px 14px;
+      border-radius: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    /* ============================================================
+       NAV ARROWS
+       ============================================================ */
+    .nav-arrow {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1000;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(8px);
+      border: none;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
+      color: var(--color-text);
+      font-size: 1.2rem;
+    }
+    .nav-arrow:hover { background: var(--color-amber); color: #fff; transform: translateY(-50%) scale(1.1); }
+    .nav-arrow:active { transform: translateY(-50%) scale(0.95); }
+    #prev-btn { left: 20px; }
+    #next-btn { right: 20px; }
+
+    @media (max-width: 768px) {
+      .nav-arrow { display: none; }
+    }
+
+    /* ============================================================
+       INDEX PANEL (toggle with "i" key or button)
+       ============================================================ */
+    #index-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 32px;
+      z-index: 1000;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(8px);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      color: var(--color-text);
+    }
+    #index-toggle:hover { background: var(--color-amber); color: #fff; }
+
+    #index-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    #index-panel.open { opacity: 1; visibility: visible; pointer-events: auto; }
+    #index-panel .index-content {
+      background: var(--color-surface);
+      border-radius: 20px;
+      padding: 36px 40px;
+      max-width: 540px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    #index-panel h2 {
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+      color: var(--color-coral);
+    }
+    #index-panel ol {
+      list-style: none;
+      counter-reset: idx;
+    }
+    #index-panel li {
+      counter-increment: idx;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #index-panel li::before {
+      content: counter(idx);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-amber-light);
+      color: var(--color-earth);
+      font-weight: 700;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+    #index-panel li:hover { background: #FEF3C7; }
+    #index-panel li.active { background: #FDE68A; font-weight: 600; }
+
+    /* ============================================================
+       SLIDE CONTAINER
+       ============================================================ */
+    #deck {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      z-index: 1;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+      z-index: 2;
+    }
+    .slide.animating {
+      visibility: visible;
+      transition: opacity var(--slide-transition), transform var(--slide-transition);
+    }
+
+    .slide-inner {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      .slide { padding: 50px 20px 80px; }
+    }
+
+    /* ============================================================
+       ANIMATED ENTRY FOR ELEMENTS INSIDE ACTIVE SLIDES
+       ============================================================ */
+    .anim {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .slide.active .anim { opacity: 1; transform: translateY(0); }
+    .slide.active .anim.d1 { transition-delay: 0.1s; }
+    .slide.active .anim.d2 { transition-delay: 0.2s; }
+    .slide.active .anim.d3 { transition-delay: 0.3s; }
+    .slide.active .anim.d4 { transition-delay: 0.4s; }
+    .slide.active .anim.d5 { transition-delay: 0.5s; }
+    .slide.active .anim.d6 { transition-delay: 0.6s; }
+    .slide.active .anim.d7 { transition-delay: 0.7s; }
+    .slide.active .anim.d8 { transition-delay: 0.8s; }
+
+    /* ============================================================
+       TYPOGRAPHY
+       ============================================================ */
+    .slide-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .slide-subtitle {
+      font-size: clamp(1rem, 1.8vw, 1.25rem);
+      font-weight: 400;
+      color: var(--color-text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--color-coral), var(--color-amber));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .green-text { color: var(--color-green-dark); }
+    .amber-text { color: var(--color-amber-dark); }
+    .coral-text { color: var(--color-coral); }
+    .earth-text { color: var(--color-earth); }
+    .small { font-size: 0.85rem; color: var(--color-text-muted); }
+
+    /* ============================================================
+       BIG COUNTER NUMBERS
+       ============================================================ */
+    .big-number {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .big-number-label {
+      font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+      color: var(--color-text-muted);
+      font-weight: 500;
+    }
+
+    /* ============================================================
+       CARDS
+       ============================================================ */
+    .card {
+      background: var(--color-surface);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .card-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    /* ============================================================
+       STAT ROWS
+       ============================================================ */
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      justify-content: center;
+    }
+    .stat-item { text-align: center; min-width: 160px; }
+
+    /* ============================================================
+       TAG / BADGE
+       ============================================================ */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .badge-amber { background: var(--color-amber-light); color: var(--color-earth); }
+    .badge-green { background: var(--color-green-light); color: var(--color-green-dark); }
+    .badge-coral { background: #FFEDD5; color: var(--color-coral-dark); }
+
+    /* ============================================================
+       TABLE
+       ============================================================ */
+    .data-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.88rem;
+      background: var(--color-surface);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+    .data-table th {
+      background: linear-gradient(135deg, var(--color-coral), var(--color-amber));
+      color: #fff;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .data-table td {
+      padding: 11px 16px;
+      border-bottom: 1px solid #F5F5F4;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: #FFFBEB; }
+
+    @media (max-width: 768px) {
+      .data-table { font-size: 0.75rem; }
+      .data-table th, .data-table td { padding: 8px 10px; }
+    }
+
+    /* ============================================================
+       COMPARISON BAR (national vs local)
+       ============================================================ */
+    .compare-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 0.85rem;
+    }
+    .compare-label { width: 120px; text-align: right; font-weight: 500; flex-shrink: 0; }
+    .compare-bar-wrap {
+      flex: 1;
+      height: 26px;
+      background: #F5F5F4;
+      border-radius: 13px;
+      overflow: hidden;
+      position: relative;
+    }
+    .compare-bar {
+      height: 100%;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+      transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+      width: 0;
+    }
+    .slide.active .compare-bar { width: var(--w); }
+    .bar-national { background: linear-gradient(90deg, var(--color-coral), var(--color-amber)); }
+    .bar-local { background: linear-gradient(90deg, var(--color-green-dark), var(--color-green)); }
+
+    @media (max-width: 768px) {
+      .compare-label { width: 80px; font-size: 0.75rem; }
+    }
+
+    /* ============================================================
+       CHART WRAPPERS
+       ============================================================ */
+    .chart-wrap {
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    /* ============================================================
+       FLEX UTILITIES
+       ============================================================ */
+    .flex-center { display: flex; align-items: center; justify-content: center; }
+    .flex-col { flex-direction: column; }
+    .gap-8 { gap: 8px; }
+    .gap-16 { gap: 16px; }
+    .gap-24 { gap: 24px; }
+    .gap-32 { gap: 32px; }
+    .text-center { text-align: center; }
+    .mt-8 { margin-top: 8px; }
+    .mt-16 { margin-top: 16px; }
+    .mt-24 { margin-top: 24px; }
+    .mb-8 { margin-bottom: 8px; }
+    .mb-16 { margin-bottom: 16px; }
+
+    /* ============================================================
+       PORTADA
+       ============================================================ */
+    .hero-icon {
+      font-size: clamp(3rem, 7vw, 5rem);
+      margin-bottom: 16px;
+      display: inline-block;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .dato-gancho {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #FEF3C7, #FFEDD5);
+      padding: 14px 24px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+      color: var(--color-earth);
+      border: 1px solid var(--color-amber-light);
+    }
+    .dato-gancho .pct {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 900;
+      color: var(--color-coral);
+    }
+
+    /* ============================================================
+       SVG ICONS (inline)
+       ============================================================ */
+    .icon-paw {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.1em;
+    }
+
+    /* ============================================================
+       CLOSING SLIDE
+       ============================================================ */
+    .closing-box {
+      background: linear-gradient(135deg, var(--color-coral), var(--color-amber-dark));
+      color: #fff;
+      padding: 40px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(249,115,22,0.25);
+    }
+    .closing-box .slide-title { color: #fff; -webkit-text-fill-color: #fff; }
+
+    /* ============================================================
+       TWO-COLUMN LAYOUT
+       ============================================================ */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    /* ============================================================
+       LIST STYLE
+       ============================================================ */
+    .icon-list { list-style: none; }
+    .icon-list li {
+      padding: 8px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+    .icon-list li .li-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+
+    /* ============================================================
+       SCROLL HINT (mobile)
+       ============================================================ */
+    @media (max-width: 768px) {
+      .slide-inner { overflow-y: auto; max-height: calc(100vh - 120px); padding-bottom: 20px; }
+    }
+
+    /* ============================================================
+       LINK CARDS (for ecosystem slides)
+       ============================================================ */
+    .link-card {
+      background: var(--color-surface);
+      border-radius: 14px;
+      padding: 16px 20px;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: var(--color-text);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .link-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+      border-color: var(--color-amber);
+    }
+    .link-card .lc-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .link-card .lc-body { flex: 1; min-width: 0; }
+    .link-card .lc-name { font-weight: 700; font-size: 0.95rem; }
+    .link-card .lc-desc { font-size: 0.78rem; color: var(--color-text-muted); line-height: 1.4; margin-top: 2px; }
+    .link-card .lc-arrow {
+      flex-shrink: 0;
+      color: var(--color-text-light);
+      transition: color 0.2s, transform 0.2s;
+    }
+    .link-card:hover .lc-arrow { color: var(--color-coral); transform: translateX(3px); }
+
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .link-grid { grid-template-columns: 1fr; }
+      .link-card .lc-desc { font-size: 0.72rem; }
+    }
+
+    /* ============================================================
+       PETWORLD SECTION
+       ============================================================ */
+    .pw-section-divider {
+      display: inline-block;
+      padding: 10px 32px;
+      border-radius: 24px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--color-coral), var(--color-amber));
+      color: #fff;
+    }
+    .pw-campo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    @media (max-width: 600px) {
+      .pw-campo-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .pw-campo {
+      background: var(--color-surface);
+      border-radius: 14px;
+      padding: 18px 14px;
+      text-align: center;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      cursor: default;
+    }
+    .pw-campo:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      border-color: var(--color-amber);
+    }
+    .pw-campo-icon { font-size: 1.8rem; margin-bottom: 8px; }
+    .pw-campo-name { font-weight: 700; font-size: 0.88rem; color: var(--color-text); }
+
+    .pw-field-detail {
+      background: var(--color-surface);
+      border-radius: 16px;
+      padding: 22px 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border: 1px solid rgba(0,0,0,0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-top: 4px solid var(--color-amber);
+    }
+    .pw-field-detail:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    }
+    .pw-field-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .pw-field-header .pw-fi { font-size: 1.4rem; }
+    .pw-field-header h3 { font-size: 1rem; font-weight: 700; }
+    .pw-price-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: #FEF3C7;
+      color: var(--color-earth);
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+    .pw-price-tag.popular {
+      background: linear-gradient(135deg, var(--color-coral), var(--color-amber));
+      color: #fff;
+    }
+    .pw-status-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: var(--color-green-light);
+      color: var(--color-green-dark);
+    }
+    .pw-status-live::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-green);
+      animation: pulse-dot 1.5s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+    .pw-status-mockup {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: #F5F5F4;
+      color: var(--color-text-muted);
+    }
+    .pw-roadmap-list {
+      list-style: none;
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .pw-roadmap-list li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: var(--color-surface);
+      margin-bottom: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      font-size: 0.88rem;
+    }
+    .pw-roadmap-list .pw-phase {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* ============================================================
+       CANVAS FIX
+       ============================================================ */
+    canvas { max-width: 100%; }
+  </style>
+</head>
+<body>
+
+  <!-- Paw print background (drawn by JS) -->
+  <canvas id="paw-bg"></canvas>
+
+  <!-- Progress Bar -->
+  <div id="progress-bar" style="width: 0%"></div>
+
+  <!-- Slide Counter -->
+  <div id="slide-counter">1 / 18</div>
+
+  <!-- Navigation Arrows -->
+  <button class="nav-arrow" id="prev-btn" aria-label="Anterior">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="nav-arrow" id="next-btn" aria-label="Siguiente">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+
+  <!-- Index Toggle -->
+  <button id="index-toggle" aria-label="Indice">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+
+  <!-- Index Panel -->
+  <div id="index-panel">
+    <div class="index-content">
+      <h2>Indice de Diapositivas</h2>
+      <ol id="index-list"></ol>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SLIDE DECK
+       ============================================================ -->
+  <div id="deck">
+
+    <!-- ========== SLIDE 1: PORTADA ========== -->
+    <div class="slide active" data-title="Portada">
+      <div class="slide-inner text-center flex-center flex-col gap-24">
+        <div class="anim hero-icon">
+          <!-- Inline SVG: Dog & Cat -->
+          <svg width="120" height="100" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Cat -->
+            <path d="M30 85 L30 55 Q30 40 40 35 L35 15 Q36 12 40 14 L45 30 Q50 28 55 28 L60 12 Q62 9 64 12 L62 28 Q68 30 72 38 Q78 45 78 55 L78 85" fill="#F59E0B" opacity="0.85"/>
+            <circle cx="45" cy="50" r="4" fill="#1C1917"/>
+            <circle cx="65" cy="50" r="4" fill="#1C1917"/>
+            <ellipse cx="55" cy="58" rx="3" ry="2" fill="#F97316"/>
+            <!-- Dog -->
+            <path d="M80 85 L80 55 Q80 42 90 38 L85 25 Q84 20 88 22 L94 35 Q98 33 102 33 Q106 33 110 35 L116 22 Q120 20 118 25 L114 38 Q120 45 120 55 L120 85" fill="#EA580C" opacity="0.85"/>
+            <circle cx="95" cy="50" r="4" fill="#1C1917"/>
+            <circle cx="110" cy="50" r="4" fill="#1C1917"/>
+            <ellipse cx="102" cy="58" rx="4" ry="3" fill="#1C1917"/>
+            <!-- Dog tongue -->
+            <ellipse cx="102" cy="65" rx="3" ry="5" fill="#F87171"/>
+          </svg>
+        </div>
+        <h1 class="slide-title anim d1">
+          El Negocio de las Mascotas<br>
+          <span class="gradient-text">en Colombia y Manizales</span>
+          <span style="font-size:0.5em; display:block; margin-top:4px; font-weight:400; color:var(--color-text-muted);">(2026)</span>
+        </h1>
+        <p class="slide-subtitle anim d2">El fenomeno de la humanizacion de las mascotas transforma el mercado colombiano</p>
+        <div class="dato-gancho anim d3">
+          <span class="pct">58%-67%</span>
+          <span>de los hogares colombianos tienen al menos una mascota</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 2: PANORAMA NACIONAL ========== -->
+    <div class="slide" data-title="Panorama Nacional">
+      <div class="slide-inner text-center flex-center flex-col gap-32">
+        <h2 class="slide-title anim">Panorama <span class="gradient-text">Nacional</span></h2>
+        <p class="slide-subtitle anim d1">El mercado de mascotas en Colombia sigue en rapido crecimiento</p>
+        <div class="stat-row anim d2">
+          <div class="stat-item">
+            <div class="big-number gradient-text" data-count="6.1" data-prefix="$" data-suffix=" B" data-decimals="1">$0</div>
+            <div class="big-number-label">COP billones/ano</div>
+            <div class="small mt-8">~USD $1.500 millones</div>
+          </div>
+          <div class="stat-item">
+            <div class="big-number green-text" data-count="10" data-prefix=">" data-suffix="%" data-decimals="0">0</div>
+            <div class="big-number-label">Crecimiento anual sostenido</div>
+          </div>
+        </div>
+        <div class="anim d3" style="max-width:500px;">
+          <div class="card" style="text-align:left;">
+            <ul class="icon-list">
+              <li><span class="li-icon">&#x1F436;</span> Colombia es uno de los mercados pet de mayor crecimiento en Latinoamerica</li>
+              <li><span class="li-icon">&#x1F4C8;</span> El gasto por mascota sube ano tras ano impulsado por la premiumizacion</li>
+              <li><span class="li-icon">&#x1F3E0;</span> El fenomeno "perrijos/gatijos" redefine la estructura familiar</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 3: DISCRIMINADO NACIONAL (DONA) ========== -->
+    <div class="slide" data-title="Distribucion Nacional por Categorias">
+      <div class="slide-inner">
+        <h2 class="slide-title text-center anim">Distribucion Nacional <span class="gradient-text">por Categorias</span></h2>
+        <p class="slide-subtitle text-center anim d1">COP $6,1 billones distribuidos en 6 grandes segmentos</p>
+        <div class="two-col anim d2">
+          <div class="chart-wrap" style="max-width:360px; margin:0 auto;">
+            <canvas id="chart-nacional"></canvas>
+          </div>
+          <div>
+            <div class="card-grid-3" style="grid-template-columns: 1fr;">
+              <div class="card" style="padding:14px 18px; display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.3rem;">&#x1F356;</span>
+                <div><strong>Alimentos</strong> <span class="badge badge-amber">55%</span><br><span class="small">~$3,35 billones</span></div>
+              </div>
+              <div class="card" style="padding:14px 18px; display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.3rem;">&#x1FA7A;</span>
+                <div><strong>Veterinaria</strong> <span class="badge badge-coral">22%</span><br><span class="small">~$1,34 billones</span></div>
+              </div>
+              <div class="card" style="padding:14px 18px; display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.3rem;">&#x1F3BE;</span>
+                <div><strong>Accesorios</strong> <span class="badge badge-green">9%</span><br><span class="small">~$549.000 M</span></div>
+              </div>
+              <div class="card" style="padding:14px 18px; display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.3rem;">&#x2728;</span>
+                <div><strong>Grooming</strong> <span class="badge badge-amber">6%</span><br><span class="small">~$366.000 M</span></div>
+              </div>
+              <div class="card" style="padding:14px 18px; display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.3rem;">&#x1F48A;</span>
+                <div><strong>Medicamentos</strong> <span class="badge badge-coral">5%</span><br><span class="small">~$305.000 M</span></div>
+              </div>
+              <div class="card" style="padding:14px 18px; display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.3rem;">&#x1F680;</span>
+                <div><strong>Serv. Emergentes</strong> <span class="badge badge-green">3%</span><br><span class="small">~$183.000 M</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 4: DETALLE - ALIMENTOS ========== -->
+    <div class="slide" data-title="Alimentos y Nutricion">
+      <div class="slide-inner">
+        <h2 class="slide-title anim">&#x1F356; Alimentos y Nutricion <span class="badge badge-amber" style="font-size:0.5em; vertical-align:middle;">55% del mercado</span></h2>
+        <p class="slide-subtitle anim d1">El segmento mas grande: ~COP $3,35 billones anuales</p>
+        <div class="card-grid anim d2">
+          <div class="card">
+            <div class="card-icon" style="background:#FEF3C7;">&#x1F436;</div>
+            <h3 style="font-size:1rem; margin-bottom:6px;">Perros vs. Gatos</h3>
+            <p class="small">64% del gasto es en alimento canino, 36% en felino. El segmento felino crece mas rapido.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon" style="background:#FFEDD5;">&#x2B50;</div>
+            <h3 style="font-size:1rem; margin-bottom:6px;">Auge Premium</h3>
+            <p class="small">Marcas premium y super-premium lideran el crecimiento. Dietas naturales, grain-free y funcionales ganan terreno.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon" style="background:#FEF9C3;">&#x1F4B0;</div>
+            <h3 style="font-size:1rem; margin-bottom:6px;">Canal a Granel</h3>
+            <p class="small">El canal granel/por bulto retiene ~42% en volumen, especialmente en estratos 1 a 3 y zonas rurales.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 5: DETALLE - VETERINARIA Y SERVICIOS EMERGENTES ========== -->
+    <div class="slide" data-title="Veterinaria y Servicios Emergentes">
+      <div class="slide-inner">
+        <h2 class="slide-title anim">&#x1FA7A; Veterinaria y &#x1F680; Servicios Emergentes</h2>
+        <p class="slide-subtitle anim d1">Los dos segmentos de mayor dinamismo en el mercado</p>
+        <div class="two-col anim d2">
+          <div class="card" style="border-left: 4px solid var(--color-coral);">
+            <h3 style="font-size:1.05rem; margin-bottom:12px; color:var(--color-coral);">Atencion Veterinaria (22%)</h3>
+            <p class="small mb-16">~COP $1,34 billones. Crecimiento: 14%-18% anual.</p>
+            <ul class="icon-list">
+              <li><span class="li-icon">&#x1F3E5;</span> Clinicas 24 horas y especializadas en auge</li>
+              <li><span class="li-icon">&#x1F4F1;</span> Telemedicina veterinaria emergente</li>
+              <li><span class="li-icon">&#x1F9EC;</span> Diagnosticos avanzados y cirugia especializada</li>
+              <li><span class="li-icon">&#x1F6E1;</span> Planes de salud preventiva con pago mensual</li>
+            </ul>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--color-green);">
+            <h3 style="font-size:1.05rem; margin-bottom:12px; color:var(--color-green-dark);">Servicios Emergentes (3%)</h3>
+            <p class="small mb-16">~COP $183.000 M. <strong>El de mayor crecimiento: 20%-25% anual.</strong></p>
+            <ul class="icon-list">
+              <li><span class="li-icon">&#x1F3E8;</span> Hoteles y guarderias pet-friendly</li>
+              <li><span class="li-icon">&#x1F393;</span> Colegios y adiestramiento canino</li>
+              <li><span class="li-icon">&#x26B0;</span> Planes exequiales para mascotas</li>
+              <li><span class="li-icon">&#x1F4F2;</span> Apps de paseo, seguimiento y delivery pet</li>
+            </ul>
+          </div>
+        </div>
+        <div class="text-center mt-24 anim d3">
+          <div class="badge badge-green" style="font-size:0.85rem; padding:8px 20px;">Tendencias clave: Premiumizacion + Salud preventiva + Digitalizacion</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 6: DETALLE - ACCESORIOS, GROOMING, MEDICAMENTOS ========== -->
+    <div class="slide" data-title="Accesorios, Grooming y Medicamentos">
+      <div class="slide-inner">
+        <h2 class="slide-title anim">Otros Segmentos <span class="gradient-text">en Crecimiento</span></h2>
+        <div class="card-grid anim d1" style="margin-top:24px;">
+          <div class="card">
+            <div class="card-icon" style="background:#DCFCE7;">&#x1F3BE;</div>
+            <h3 style="font-size:1rem; margin-bottom:4px;">Accesorios y Juguetes</h3>
+            <p class="small mb-8"><strong>9%</strong> del mercado &middot; ~$549.000 M</p>
+            <p class="small">Apalancado por e-commerce. Camas ergonomicas, arneses tecnicos, juguetes interactivos y wearables. Marcapalaya y Mercado Libre como canales clave.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon" style="background:#FEF3C7;">&#x2728;</div>
+            <h3 style="font-size:1rem; margin-bottom:4px;">Higiene y Estetica (Grooming)</h3>
+            <p class="small mb-8"><strong>6%</strong> del mercado &middot; ~$366.000 M</p>
+            <p class="small">Crecimiento de dos digitos. Spas caninos, tratamientos dermatologicos, productos organicos. Servicio recurrente (cada 3-4 semanas).</p>
+          </div>
+          <div class="card">
+            <div class="card-icon" style="background:#FFEDD5;">&#x1F48A;</div>
+            <h3 style="font-size:1rem; margin-bottom:4px;">Medicamentos y Suplementos</h3>
+            <p class="small mb-8"><strong>5%</strong> del mercado &middot; ~$305.000 M</p>
+            <p class="small">Antiparasitarios lideran. Crecen suplementos articulares, probioticos y dermatologicos. Condiciones tropicales impulsan desparasitacion frecuente.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 7: TRANSICION A MANIZALES ========== -->
+    <div class="slide" data-title="Caso Local: Manizales">
+      <div class="slide-inner text-center flex-center flex-col gap-24">
+        <div class="anim" style="font-size:3rem;">&#x1F3D4;&#xFE0F;</div>
+        <h2 class="slide-title anim d1">De lo Nacional a lo <span class="gradient-text">Local</span></h2>
+        <p class="slide-subtitle anim d2" style="max-width:650px; margin:0 auto;">Manizales: un mercado con caracteristicas unicas que potencian el gasto en mascotas</p>
+        <div class="card-grid anim d3" style="max-width:800px; margin:0 auto;">
+          <div class="card text-center">
+            <div style="font-size:2rem; margin-bottom:8px;">&#x1F474;</div>
+            <h3 style="font-size:0.95rem; margin-bottom:4px;">Alto indice de envejecimiento</h3>
+            <p class="small">Poblacion madura que busca compania en mascotas</p>
+          </div>
+          <div class="card text-center">
+            <div style="font-size:2rem; margin-bottom:8px;">&#x1F476;</div>
+            <h3 style="font-size:0.95rem; margin-bottom:4px;">Baja natalidad</h3>
+            <p class="small">Las mascotas sustituyen o complementan la crianza</p>
+          </div>
+          <div class="card text-center">
+            <div style="font-size:2rem; margin-bottom:8px;">&#x1F393;</div>
+            <h3 style="font-size:0.95rem; margin-bottom:4px;">Alta poblacion universitaria</h3>
+            <p class="small">Jovenes independientes adoptan "perrijos" y "gatijos"</p>
+          </div>
+          <div class="card text-center">
+            <div style="font-size:2rem; margin-bottom:8px;">&#x1F495;</div>
+            <h3 style="font-size:0.95rem; margin-bottom:4px;">Fenomeno "Perrijos"</h3>
+            <p class="small">Humanizacion extrema: las mascotas son miembros plenos del hogar</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 8: MANIZALES EN CIFRAS ========== -->
+    <div class="slide" data-title="Manizales en Cifras">
+      <div class="slide-inner text-center flex-center flex-col gap-24">
+        <h2 class="slide-title anim">Manizales <span class="gradient-text">en Cifras</span></h2>
+        <div class="stat-row anim d1">
+          <div class="stat-item">
+            <div class="big-number amber-text" data-count="165" data-suffix=" mil" data-decimals="0">0</div>
+            <div class="big-number-label">Hogares urbanos</div>
+          </div>
+          <div class="stat-item">
+            <div class="big-number coral-text" data-count="62" data-suffix="%" data-decimals="0">0</div>
+            <div class="big-number-label">Penetracion mascotas</div>
+          </div>
+          <div class="stat-item">
+            <div class="big-number green-text" data-count="102" data-suffix=" mil" data-decimals="0">0</div>
+            <div class="big-number-label">Perros y gatos con hogar</div>
+          </div>
+        </div>
+        <div class="anim d2" style="max-width:500px;">
+          <div class="card">
+            <ul class="icon-list">
+              <li><span class="li-icon">&#x1F4B5;</span> Gasto clinico y estetico proporcionalmente mas alto que el promedio nacional</li>
+              <li><span class="li-icon">&#x1F3E0;</span> Estratos 3 a 6 concentran el mayor gasto per capita en mascotas</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 9: FACTURACION LOCAL ========== -->
+    <div class="slide" data-title="Facturacion Local">
+      <div class="slide-inner text-center flex-center flex-col gap-24">
+        <h2 class="slide-title anim">Facturacion Local <span class="gradient-text">Manizales</span></h2>
+        <p class="slide-subtitle anim d1">Manizales representa 1,2%-1,4% del total nacional</p>
+        <div class="stat-row anim d2">
+          <div class="stat-item">
+            <div class="big-number gradient-text" data-count="80" data-prefix="$" data-suffix=" mil M" data-decimals="0">$0</div>
+            <div class="big-number-label">COP $75.000 - $85.000 millones</div>
+            <div class="small mt-8">USD $19-21 millones anuales</div>
+          </div>
+        </div>
+        <div class="anim d3" style="max-width:520px;">
+          <div class="card" style="border-left:4px solid var(--color-amber);">
+            <p style="font-size:0.92rem; line-height:1.6;">
+              <strong class="amber-text">Dato notable:</strong> El gasto clinico y estetico en Manizales es proporcionalmente mas alto que el promedio nacional, impulsado por profesionales jovenes con alto poder adquisitivo y la cultura de humanizacion.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 10: DISCRIMINADO MANIZALES (TABLA) ========== -->
+    <div class="slide" data-title="Discriminado Manizales">
+      <div class="slide-inner">
+        <h2 class="slide-title text-center anim">Discriminado <span class="gradient-text">Manizales</span></h2>
+        <div class="anim d1" style="overflow-x:auto; margin-top:16px;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Categoria</th>
+                <th>%</th>
+                <th>Facturacion COP</th>
+                <th>Comportamiento del Consumidor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>&#x1F356; Alimentacion</td>
+                <td><strong>53%</strong></td>
+                <td>$42.400 M</td>
+                <td>Agropecuarios tradicionales, cadenas, pet shops de barrio</td>
+              </tr>
+              <tr>
+                <td>&#x1FA7A; Veterinaria</td>
+                <td><strong>24%</strong></td>
+                <td>$19.200 M</td>
+                <td>Clinicas 24h, cirugias; Palermo, Av. Santander, Chipre, Milan</td>
+              </tr>
+              <tr>
+                <td>&#x1F3BE; Accesorios</td>
+                <td><strong>9%</strong></td>
+                <td>$7.200 M</td>
+                <td>E-commerce y CC: Mallplaza, Fundadores, Cable Plaza</td>
+              </tr>
+              <tr>
+                <td>&#x2728; Grooming</td>
+                <td><strong>7%</strong></td>
+                <td>$5.600 M</td>
+                <td>Estratos 3 al 6, frecuencia mensual</td>
+              </tr>
+              <tr>
+                <td>&#x1F48A; Medicamentos</td>
+                <td><strong>5%</strong></td>
+                <td>$4.000 M</td>
+                <td>Antiparasitarios por dinamicas rurales: Santagueda, Neira, Chinchina</td>
+              </tr>
+              <tr>
+                <td>&#x1F680; Serv. Emergentes</td>
+                <td><strong>2%</strong></td>
+                <td>$1.600 M</td>
+                <td>Guarderias campestres vias Neira/Letras, colegios caninos, planes exequiales</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 11: COMPARATIVO NACIONAL VS LOCAL ========== -->
+    <div class="slide" data-title="Nacional vs. Local">
+      <div class="slide-inner">
+        <h2 class="slide-title text-center anim">Nacional vs. <span class="gradient-text">Manizales</span></h2>
+        <p class="slide-subtitle text-center anim d1">Diferencias clave en la distribucion del gasto</p>
+        <div class="anim d2" style="max-width:750px; margin:0 auto;">
+          <!-- Alimentacion -->
+          <div style="margin-bottom:20px;">
+            <div style="font-weight:600; margin-bottom:6px; font-size:0.9rem;">&#x1F356; Alimentacion</div>
+            <div class="compare-row">
+              <span class="compare-label">Nacional</span>
+              <div class="compare-bar-wrap"><div class="compare-bar bar-national" style="--w:55%;">55%</div></div>
+            </div>
+            <div class="compare-row">
+              <span class="compare-label">Manizales</span>
+              <div class="compare-bar-wrap"><div class="compare-bar bar-local" style="--w:53%;">53%</div></div>
+            </div>
+          </div>
+          <!-- Veterinaria -->
+          <div style="margin-bottom:20px;">
+            <div style="font-weight:600; margin-bottom:6px; font-size:0.9rem;">&#x1FA7A; Veterinaria</div>
+            <div class="compare-row">
+              <span class="compare-label">Nacional</span>
+              <div class="compare-bar-wrap"><div class="compare-bar bar-national" style="--w:44%;">22%</div></div>
+            </div>
+            <div class="compare-row">
+              <span class="compare-label">Manizales</span>
+              <div class="compare-bar-wrap"><div class="compare-bar bar-local" style="--w:48%;">24%</div></div>
+            </div>
+          </div>
+          <!-- Grooming -->
+          <div style="margin-bottom:20px;">
+            <div style="font-weight:600; margin-bottom:6px; font-size:0.9rem;">&#x2728; Grooming</div>
+            <div class="compare-row">
+              <span class="compare-label">Nacional</span>
+              <div class="compare-bar-wrap"><div class="compare-bar bar-national" style="--w:24%;">6%</div></div>
+            </div>
+            <div class="compare-row">
+              <span class="compare-label">Manizales</span>
+              <div class="compare-bar-wrap"><div class="compare-bar bar-local" style="--w:28%;">7%</div></div>
+            </div>
+          </div>
+          <!-- Serv. Emergentes -->
+          <div>
+            <div style="font-weight:600; margin-bottom:6px; font-size:0.9rem;">&#x1F680; Servicios Emergentes</div>
+            <div class="compare-row">
+              <span class="compare-label">Nacional</span>
+              <div class="compare-bar-wrap"><div class="compare-bar bar-national" style="--w:12%;">3%</div></div>
+            </div>
+            <div class="compare-row">
+              <span class="compare-label">Manizales</span>
+              <div class="compare-bar-wrap"><div class="compare-bar bar-local" style="--w:8%;">2%</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-16 anim d3">
+          <p class="small" style="max-width:600px; margin:0 auto;">Manizales destina proporcionalmente <strong>mas a veterinaria y grooming</strong>, y <strong>menos a alimentacion y servicios emergentes</strong> que el promedio nacional. Los servicios emergentes representan una oportunidad de crecimiento.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 12: DINAMICA DE CANALES ========== -->
+    <div class="slide" data-title="Dinamica de Canales">
+      <div class="slide-inner">
+        <h2 class="slide-title text-center anim">Dinamica de <span class="gradient-text">Canales</span></h2>
+        <div class="two-col anim d1" style="margin-top:24px;">
+          <div class="card" style="border-top: 4px solid var(--color-coral);">
+            <h3 style="font-size:1.05rem; margin-bottom:16px; color:var(--color-coral);">&#x1F1E8;&#x1F1F4; Nacional: Centralizado</h3>
+            <ul class="icon-list">
+              <li><span class="li-icon">&#x1F4CD;</span> <strong>Bogota 25%</strong>, Cali 18%, Medellin 17%</li>
+              <li><span class="li-icon">&#x1F4F1;</span> Plataformas de delivery digitales lideran el crecimiento</li>
+              <li><span class="li-icon">&#x1F6D2;</span> Grandes superficies y tiendas especializadas dominan canal moderno</li>
+              <li><span class="li-icon">&#x1F310;</span> E-commerce pet crece >30% anual</li>
+            </ul>
+          </div>
+          <div class="card" style="border-top: 4px solid var(--color-green);">
+            <h3 style="font-size:1.05rem; margin-bottom:16px; color:var(--color-green-dark);">&#x1F3D4;&#xFE0F; Manizales: Canal Mixto</h3>
+            <ul class="icon-list">
+              <li><span class="li-icon">&#x1F3EA;</span> Canal tradicional: granel / por bulto, agropecuarios de barrio</li>
+              <li><span class="li-icon">&#x1F31F;</span> Canal moderno/premium: oriente y centro-sur de la ciudad</li>
+              <li><span class="li-icon">&#x1F468;&#x200D;&#x1F4BB;</span> Impulsado por profesionales jovenes e independientes</li>
+              <li><span class="li-icon">&#x2694;&#xFE0F;</span> Competencia activa entre canal tradicional y moderno</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 13: ECOSISTEMA DIGITAL — CONCEPTO ========== -->
+    <div class="slide" data-title="Ecosistema Digital de Mascotas">
+      <div class="slide-inner text-center">
+        <h2 class="slide-title anim">El Ecosistema Digital <span class="gradient-text">de Mascotas</span></h2>
+        <p class="slide-subtitle anim d1">Un lider no solo vende comida: integra cuatro pilares en una sola plataforma</p>
+        <div class="card-grid anim d2" style="margin-top:24px;">
+          <div class="card text-center" style="border-bottom:3px solid var(--color-amber);">
+            <div class="card-icon" style="background:#FEF3C7; margin:0 auto 12px;">&#x1F6D2;</div>
+            <h3 style="font-size:1rem; margin-bottom:6px;">E-commerce</h3>
+            <p class="small">Productos premium, suscripciones recurrentes (auto-ship) y delivery rapido a la puerta.</p>
+          </div>
+          <div class="card text-center" style="border-bottom:3px solid var(--color-green);">
+            <div class="card-icon" style="background:#DCFCE7; margin:0 auto 12px;">&#x1FA7A;</div>
+            <h3 style="font-size:1rem; margin-bottom:6px;">Salud</h3>
+            <p class="small">Telemedicina veterinaria, agendamiento de citas, farmacias online y seguros para mascotas.</p>
+          </div>
+          <div class="card text-center" style="border-bottom:3px solid var(--color-coral);">
+            <div class="card-icon" style="background:#FFEDD5; margin:0 auto 12px;">&#x1F6B6;</div>
+            <h3 style="font-size:1rem; margin-bottom:6px;">Servicios</h3>
+            <p class="small">Paseadores, cuidadores (pet-sitting), peluqueria a domicilio y guarderias conectadas por app.</p>
+          </div>
+          <div class="card text-center" style="border-bottom:3px solid #8B5CF6;">
+            <div class="card-icon" style="background:#EDE9FE; margin:0 auto 12px;">&#x1F451;</div>
+            <h3 style="font-size:1rem; margin-bottom:6px;">Fidelizacion</h3>
+            <p class="small">Clubes de membresia, programas de puntos, contenido educativo y comunidad de pet parents.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 14: LIDERES MUNDIALES ========== -->
+    <div class="slide" data-title="Lideres Mundiales">
+      <div class="slide-inner">
+        <h2 class="slide-title text-center anim">Lideres <span class="gradient-text">Mundiales</span></h2>
+        <p class="slide-subtitle text-center anim d1">Referentes globales del ecosistema pet digital</p>
+        <div class="link-grid anim d2" style="margin-top:16px;">
+          <a href="https://www.chewy.com" target="_blank" rel="noopener" class="link-card">
+            <div class="lc-icon" style="background:#FEF3C7;">&#x1F31F;</div>
+            <div class="lc-body">
+              <div class="lc-name">Chewy <span class="badge badge-amber" style="font-size:0.65rem; margin-left:4px;">EE.UU.</span></div>
+              <div class="lc-desc">El estandar de oro: farmacia, telemedicina "Connect with a Vet" y servicio al cliente legendario.</div>
+            </div>
+            <svg class="lc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
+          <a href="https://www.rover.com" target="_blank" rel="noopener" class="link-card">
+            <div class="lc-icon" style="background:#DCFCE7;">&#x1F43E;</div>
+            <div class="lc-body">
+              <div class="lc-name">Rover <span class="badge badge-green" style="font-size:0.65rem; margin-left:4px;">EE.UU.</span></div>
+              <div class="lc-desc">Domina el mercado de servicios: paseos y hospedaje, conectando duenos con cuidadores certificados.</div>
+            </div>
+            <svg class="lc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
+          <a href="https://wagwalking.com" target="_blank" rel="noopener" class="link-card">
+            <div class="lc-icon" style="background:#FEF9C3;">&#x1F415;</div>
+            <div class="lc-body">
+              <div class="lc-name">Wag! <span class="badge badge-amber" style="font-size:0.65rem; margin-left:4px;">EE.UU.</span></div>
+              <div class="lc-desc">Servicios de paseo y cuidado on-demand con seguimiento GPS en tiempo real.</div>
+            </div>
+            <svg class="lc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
+          <a href="https://www.zooplus.com" target="_blank" rel="noopener" class="link-card">
+            <div class="lc-icon" style="background:#DBEAFE;">&#x1F30D;</div>
+            <div class="lc-body">
+              <div class="lc-name">Zooplus <span class="badge badge-coral" style="font-size:0.65rem; margin-left:4px;">Europa</span></div>
+              <div class="lc-desc">Lider en logistica y variedad de productos en mas de 30 paises europeos.</div>
+            </div>
+            <svg class="lc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
+          <a href="https://www.petco.com" target="_blank" rel="noopener" class="link-card">
+            <div class="lc-icon" style="background:#FFEDD5;">&#x1F3EA;</div>
+            <div class="lc-body">
+              <div class="lc-name">Petco <span class="badge badge-coral" style="font-size:0.65rem; margin-left:4px;">EE.UU.</span></div>
+              <div class="lc-desc">Gigante omnicanal: miles de tiendas fisicas + app robusta para entrenamiento y salud.</div>
+            </div>
+            <svg class="lc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
+          <a href="https://www.petsmart.com" target="_blank" rel="noopener" class="link-card">
+            <div class="lc-icon" style="background:#FCE7F3;">&#x1F3E2;</div>
+            <div class="lc-body">
+              <div class="lc-name">PetSmart <span class="badge badge-coral" style="font-size:0.65rem; margin-left:4px;">EE.UU.</span></div>
+              <div class="lc-desc">Gigante omnicanal con servicios de entrenamiento, grooming y salud integrados.</div>
+            </div>
+            <svg class="lc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 15: LIDERES EN COLOMBIA ========== -->
+    <div class="slide" data-title="Lideres en Colombia">
+      <div class="slide-inner">
+        <h2 class="slide-title text-center anim">Lideres en <span class="gradient-text">Colombia</span></h2>
+        <p class="slide-subtitle text-center anim d1">Las plataformas que definen el ecosistema pet digital colombiano</p>
+        <div class="link-grid anim d2" style="margin-top:16px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+          <a href="https://laika.com.co" target="_blank" rel="noopener" class="link-card" style="border-left:4px solid var(--color-coral);">
+            <div class="lc-icon" style="background:linear-gradient(135deg,#FFEDD5,#FEF3C7);">&#x1F525;</div>
+            <div class="lc-body">
+              <div class="lc-name">Laika <span class="badge badge-coral" style="font-size:0.65rem; margin-left:4px;">Lider regional</span></div>
+              <div class="lc-desc">Lider indiscutible: app de alta conversion, membresia "Laika Member", servicios veterinarios a domicilio y seguros de vida.</div>
+            </div>
+            <svg class="lc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
+          <a href="https://www.puppis.com.co" target="_blank" rel="noopener" class="link-card" style="border-left:4px solid var(--color-green);">
+            <div class="lc-icon" style="background:#DCFCE7;">&#x1FA7A;</div>
+            <div class="lc-body">
+              <div class="lc-name">Puppis <span class="badge badge-green" style="font-size:0.65rem; margin-left:4px;">Omnicanal</span></div>
+              <div class="lc-desc">Estrategia omnicanal: clinicas veterinarias fisicas de alto nivel + plataforma digital fuerte.</div>
+            </div>
+            <svg class="lc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
+          <a href="https://www.ciudaddemascotas.com" target="_blank" rel="noopener" class="link-card" style="border-left:4px solid var(--color-amber);">
+            <div class="lc-icon" style="background:#FEF3C7;">&#x1F6D2;</div>
+            <div class="lc-body">
+              <div class="lc-name">Ciudaddemascotas.com <span class="badge badge-amber" style="font-size:0.65rem; margin-left:4px;">E-commerce</span></div>
+              <div class="lc-desc">Pionero del e-commerce especializado con fuerte enfoque en nutricion tecnica y envios a todo el pais.</div>
+            </div>
+            <svg class="lc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
+          <a href="https://www.gabrica.co" target="_blank" rel="noopener" class="link-card" style="border-left:4px solid #8B5CF6;">
+            <div class="lc-icon" style="background:#EDE9FE;">&#x1F4DA;</div>
+            <div class="lc-body">
+              <div class="lc-name">Gabrica <span class="badge" style="background:#EDE9FE; color:#7C3AED; font-size:0.65rem; margin-left:4px;">B2B2C</span></div>
+              <div class="lc-desc">Ecosistema B2B2C: distribuidor lider que educa y conecta a toda la industria pet del pais.</div>
+            </div>
+            <svg class="lc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 16: TENDENCIAS DIGITALES ========== -->
+    <div class="slide" data-title="Tendencias Digitales Clave">
+      <div class="slide-inner text-center">
+        <h2 class="slide-title anim">Tendencias Digitales <span class="gradient-text">Clave</span></h2>
+        <p class="slide-subtitle anim d1">Los tres vectores que transforman la industria pet global</p>
+        <div class="card-grid anim d2" style="margin-top:24px; max-width:900px; margin-left:auto; margin-right:auto;">
+          <div class="card" style="border-left:4px solid var(--color-coral); text-align:left;">
+            <div style="font-size:2rem; margin-bottom:10px;">&#x1F9D1;&#x200D;&#x1F91D;&#x200D;&#x1F9D1;</div>
+            <h3 style="font-size:1.05rem; margin-bottom:8px;">Humanizacion</h3>
+            <p class="small">Productos de grado humano, bienestar holistico, dietas personalizadas y experiencias premium para "perrijos" y "gatijos".</p>
+          </div>
+          <div class="card" style="border-left:4px solid var(--color-green); text-align:left;">
+            <div style="font-size:2rem; margin-bottom:10px;">&#x1F504;</div>
+            <h3 style="font-size:1.05rem; margin-bottom:8px;">Suscripcion (Auto-ship)</h3>
+            <p class="small">Ingresos recurrentes automatizados. El cliente programa y la plataforma entrega sin friccion. Retencion superior al 80%.</p>
+          </div>
+          <div class="card" style="border-left:4px solid #8B5CF6; text-align:left;">
+            <div style="font-size:2rem; margin-bottom:10px;">&#x1F4CA;</div>
+            <h3 style="font-size:1.05rem; margin-bottom:8px;">Data-Driven</h3>
+            <p class="small">Personalizacion extrema basada en edad, raza, peso y condiciones de la mascota. Recomendaciones inteligentes con IA.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 17: OPORTUNIDADES Y TENDENCIAS ========== -->
+    <div class="slide" data-title="Oportunidades y Tendencias">
+      <div class="slide-inner text-center">
+        <h2 class="slide-title anim">Oportunidades y <span class="gradient-text">Tendencias</span></h2>
+        <p class="slide-subtitle anim d1">Los vectores que definiran el mercado pet en los proximos anos</p>
+        <div class="card-grid anim d2" style="margin-top:24px;">
+          <div class="card text-center" style="border-bottom:3px solid var(--color-amber);">
+            <div style="font-size:2.5rem; margin-bottom:10px;">&#x2B50;</div>
+            <h3 style="font-size:1rem; margin-bottom:6px;">Premiumizacion</h3>
+            <p class="small">Alimentos funcionales, accesorios de diseno, servicios boutique. El consumidor paga mas por calidad y bienestar.</p>
+          </div>
+          <div class="card text-center" style="border-bottom:3px solid var(--color-green);">
+            <div style="font-size:2.5rem; margin-bottom:10px;">&#x1FA7A;</div>
+            <h3 style="font-size:1rem; margin-bottom:6px;">Salud Preventiva y Telemedicina</h3>
+            <p class="small">Planes de salud, vacunacion programada, consultas virtuales. La prevencion reduce costos y mejora calidad de vida.</p>
+          </div>
+          <div class="card text-center" style="border-bottom:3px solid var(--color-coral);">
+            <div style="font-size:2.5rem; margin-bottom:10px;">&#x1F680;</div>
+            <h3 style="font-size:1rem; margin-bottom:6px;">Servicios Emergentes</h3>
+            <p class="small">Guarderias, colegios caninos, seguros, planes exequiales. El segmento de mayor crecimiento (20-25% anual).</p>
+          </div>
+          <div class="card text-center" style="border-bottom:3px solid #8B5CF6;">
+            <div style="font-size:2.5rem; margin-bottom:10px;">&#x1F4F2;</div>
+            <h3 style="font-size:1rem; margin-bottom:6px;">E-commerce y Digitalizacion</h3>
+            <p class="small">Delivery de alimentos, apps de paseo, marketplaces pet, identificacion digital (NFC/QR). El canal digital es imparable.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 19: QUE ES PETWORLD ========== -->
+    <div class="slide" data-title="Que es PetWorld">
+      <div class="slide-inner text-center flex-center flex-col gap-24">
+        <div class="anim">
+          <span class="pw-section-divider">PETWORLD</span>
+        </div>
+        <h2 class="slide-title anim d1" style="max-width:800px;">
+          La Super-Plataforma del<br><span class="gradient-text">Mundo de las Mascotas</span>
+        </h2>
+        <p class="slide-subtitle anim d2" style="max-width:650px; margin:0 auto; font-style:italic; border-left:4px solid var(--color-coral); padding-left:16px; text-align:left;">
+          "El hogar donde las mascotas colombianas tienen identidad y sus personas encuentran todo &mdash;conocimiento, comunidad, servicios y productos&mdash; en un solo lugar de confianza."
+        </p>
+        <div class="card-grid anim d3" style="max-width:750px; margin:0 auto;">
+          <div class="card text-center">
+            <div style="font-size:2rem; margin-bottom:8px;">&#x1F43E;</div>
+            <h3 style="font-size:0.95rem; margin-bottom:4px;">Nucleo de Identidad</h3>
+            <p class="small">Cada mascota tiene su perfil digital unico con PawTag (NFC + QR)</p>
+          </div>
+          <div class="card text-center">
+            <div style="font-size:2rem; margin-bottom:8px;">&#x1F91D;</div>
+            <h3 style="font-size:0.95rem; margin-bottom:4px;">Comunidad</h3>
+            <p class="small">Conectando pet parents en Manizales y Colombia</p>
+          </div>
+          <div class="card text-center">
+            <div style="font-size:2rem; margin-bottom:8px;">&#x1F1E8;&#x1F1F4;</div>
+            <h3 style="font-size:0.95rem; margin-bottom:4px;">100% Local</h3>
+            <p class="small">Enfoque inicial en Manizales, todo el contenido en espanol</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 20: LA PAGINA EXPLORAR ========== -->
+    <div class="slide" data-title="Pagina Explorar: 9 Campos">
+      <div class="slide-inner text-center flex-center flex-col gap-24">
+        <div class="anim">
+          <span class="badge badge-coral" style="font-size:0.85rem; padding:8px 20px;">/explorar</span>
+        </div>
+        <h2 class="slide-title anim d1">Los 9 Campos del <span class="gradient-text">Explorador</span></h2>
+        <p class="slide-subtitle anim d2" style="max-width:620px; margin:0 auto;">Un showcase interactivo del ecosistema completo, compuesto por 9 pestanas localizadas a Manizales</p>
+        <div class="pw-campo-grid anim d3">
+          <div class="pw-campo">
+            <div class="pw-campo-icon">&#x1F43E;</div>
+            <div class="pw-campo-name">PawTag</div>
+          </div>
+          <div class="pw-campo">
+            <div class="pw-campo-icon">&#x1F4DA;</div>
+            <div class="pw-campo-name">Conocimiento</div>
+          </div>
+          <div class="pw-campo">
+            <div class="pw-campo-icon">&#x1F3E5;</div>
+            <div class="pw-campo-name">Veterinarias</div>
+          </div>
+          <div class="pw-campo">
+            <div class="pw-campo-icon">&#x2702;&#xFE0F;</div>
+            <div class="pw-campo-name">Grooming</div>
+          </div>
+          <div class="pw-campo">
+            <div class="pw-campo-icon">&#x1F4F9;</div>
+            <div class="pw-campo-name">Telemedicina</div>
+          </div>
+          <div class="pw-campo">
+            <div class="pw-campo-icon">&#x2764;&#xFE0F;</div>
+            <div class="pw-campo-name">Red Social</div>
+          </div>
+          <div class="pw-campo">
+            <div class="pw-campo-icon">&#x1F91D;</div>
+            <div class="pw-campo-name">Encuentros</div>
+          </div>
+          <div class="pw-campo">
+            <div class="pw-campo-icon">&#x1F6D2;</div>
+            <div class="pw-campo-name">Marketplace</div>
+          </div>
+          <div class="pw-campo">
+            <div class="pw-campo-icon">&#x1F4C5;</div>
+            <div class="pw-campo-name">Eventos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 21: CAMPOS 1-3 ========== -->
+    <div class="slide" data-title="PawTag, Conocimiento, Veterinarias">
+      <div class="slide-inner">
+        <h2 class="slide-title text-center anim">Campos <span class="gradient-text">1 a 3</span></h2>
+        <div class="card-grid anim d1" style="margin-top:20px;">
+          <div class="pw-field-detail" style="border-top-color: var(--color-coral);">
+            <div class="pw-field-header">
+              <span class="pw-fi">&#x1F43E;</span>
+              <h3>PawTag <small class="small">(Identidad)</small></h3>
+              <span class="pw-status-live">EN PRODUCCION</span>
+            </div>
+            <p class="small mb-8">Tag fisico NFC + QR para recuperacion de mascotas perdidas. El unico campo con funcionalidad real.</p>
+            <div>
+              <span class="pw-price-tag">Basico $29.900</span>
+              <span class="pw-price-tag popular">NFC $49.900 &#x2605;</span>
+              <span class="pw-price-tag">Duo $79.900</span>
+            </div>
+          </div>
+          <div class="pw-field-detail" style="border-top-color: var(--color-green);">
+            <div class="pw-field-header">
+              <span class="pw-fi">&#x1F4DA;</span>
+              <h3>Conocimiento</h3>
+              <span class="pw-status-mockup">MOCKUP</span>
+            </div>
+            <p class="small mb-8">Biblioteca de contenido con articulos y guias: nutricion, salud, comportamiento, razas, grooming, primeros auxilios.</p>
+            <p class="small" style="color:var(--color-green-dark);"><strong>Localizada al clima del Eje Cafetero</strong></p>
+          </div>
+          <div class="pw-field-detail" style="border-top-color: var(--color-amber);">
+            <div class="pw-field-header">
+              <span class="pw-fi">&#x1F3E5;</span>
+              <h3>Veterinarias</h3>
+              <span class="pw-status-mockup">MOCKUP</span>
+            </div>
+            <p class="small mb-8">Directorio de clinicas locales con mapa, filtros por especialidad (Urgencias 24h, Cirugia, Dermatologia) y calificaciones.</p>
+            <p class="small" style="color:var(--color-amber-dark);"><strong>Clinicas de Manizales con fichas detalladas</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 22: CAMPOS 4-6 ========== -->
+    <div class="slide" data-title="Grooming, Telemedicina, Red Social">
+      <div class="slide-inner">
+        <h2 class="slide-title text-center anim">Campos <span class="gradient-text">4 a 6</span></h2>
+        <div class="card-grid anim d1" style="margin-top:20px;">
+          <div class="pw-field-detail" style="border-top-color: #8B5CF6;">
+            <div class="pw-field-header">
+              <span class="pw-fi">&#x2702;&#xFE0F;</span>
+              <h3>Grooming</h3>
+              <span class="pw-status-mockup">MOCKUP</span>
+            </div>
+            <p class="small mb-8">Descubrimiento de servicios de bano, peluqueria, paseos y guarderia. Tarjetas de proveedores con rangos de precio y calificaciones.</p>
+          </div>
+          <div class="pw-field-detail" style="border-top-color: var(--color-coral);">
+            <div class="pw-field-header">
+              <span class="pw-fi">&#x1F4F9;</span>
+              <h3>Telemedicina</h3>
+              <span class="pw-status-mockup">MOCKUP</span>
+            </div>
+            <p class="small mb-8">Consultas veterinarias por video en 3 pasos: elegir vet, agendar, conectarse. Tarjetas de doctores por especialidad.</p>
+            <p class="small" style="color:var(--color-text-muted); font-style:italic;">Disclaimer: orientacion y seguimiento, no reemplaza consulta presencial</p>
+          </div>
+          <div class="pw-field-detail" style="border-top-color: #EC4899;">
+            <div class="pw-field-header">
+              <span class="pw-fi">&#x2764;&#xFE0F;</span>
+              <h3>Red Social</h3>
+              <span class="pw-status-mockup">MOCKUP</span>
+            </div>
+            <p class="small mb-8">Feed estilo Instagram centrado en mascotas: stories, posts de usuarios de Manizales, likes y comentarios.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 23: CAMPOS 7-9 ========== -->
+    <div class="slide" data-title="Encuentros, Marketplace, Eventos">
+      <div class="slide-inner">
+        <h2 class="slide-title text-center anim">Campos <span class="gradient-text">7 a 9</span></h2>
+        <div class="card-grid anim d1" style="margin-top:20px;">
+          <div class="pw-field-detail" style="border-top-color: var(--color-coral);">
+            <div class="pw-field-header">
+              <span class="pw-fi">&#x1F91D;</span>
+              <h3>Encuentros</h3>
+              <span class="pw-status-mockup">MOCKUP</span>
+            </div>
+            <p class="small mb-8">Matching estilo Tinder para playdates y socializacion canina. Filtros: tamano, energia, distancia, vacunado.</p>
+            <p class="small" style="color:var(--color-coral);"><strong>Tarjetas de match con compatibilidad</strong></p>
+          </div>
+          <div class="pw-field-detail" style="border-top-color: var(--color-green);">
+            <div class="pw-field-header">
+              <span class="pw-fi">&#x1F6D2;</span>
+              <h3>Marketplace</h3>
+              <span class="pw-status-mockup">MOCKUP</span>
+            </div>
+            <p class="small mb-8">E-commerce para marcas locales e independientes. Categorias, tarjetas de producto con precio.</p>
+            <div class="badge badge-green" style="font-size:0.7rem;">Envio gratis en Manizales</div>
+          </div>
+          <div class="pw-field-detail" style="border-top-color: var(--color-amber);">
+            <div class="pw-field-header">
+              <span class="pw-fi">&#x1F4C5;</span>
+              <h3>Eventos</h3>
+              <span class="pw-status-mockup">MOCKUP</span>
+            </div>
+            <p class="small mb-8">Calendario y descubrimiento de eventos pet-friendly en Manizales y Colombia.</p>
+            <div class="badge badge-amber" style="font-size:0.7rem;">Destacado: CVDC 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 24: ESTADO Y HOJA DE RUTA ========== -->
+    <div class="slide" data-title="Estado y Hoja de Ruta">
+      <div class="slide-inner text-center flex-center flex-col gap-24">
+        <h2 class="slide-title anim">Estado Actual y <span class="gradient-text">Hoja de Ruta</span></h2>
+        <div class="two-col anim d1" style="max-width:800px; margin:0 auto; align-items:stretch;">
+          <div class="card" style="border-left:4px solid var(--color-green); text-align:left;">
+            <h3 style="font-size:1rem; margin-bottom:12px; color:var(--color-green-dark);">&#x2705; Funcional Hoy</h3>
+            <p class="small mb-8"><strong>PawTag</strong> &mdash; CRUD completo, perfil publico, escritura NFC, codigo QR.</p>
+            <p class="small">El unico campo con funcionalidad real en produccion.</p>
+          </div>
+          <div class="card" style="border-left:4px solid var(--color-amber); text-align:left;">
+            <h3 style="font-size:1rem; margin-bottom:12px; color:var(--color-amber-dark);">&#x1F6A7; Hoja de Ruta Interactiva</h3>
+            <p class="small mb-8">Los 8 campos restantes son <strong>mockups funcionales</strong> que comunican la vision a usuarios tempranos.</p>
+            <p class="small">Funcionan como un demo interactivo del producto completo.</p>
+          </div>
+        </div>
+        <div class="anim d2" style="max-width:650px; width:100%;">
+          <ul class="pw-roadmap-list">
+            <li>
+              <span class="pw-phase" style="background:var(--color-green);">1</span>
+              <span><strong>Identidad:</strong> PawTag + perfiles de mascota</span>
+              <span class="pw-status-live" style="margin-left:auto;">LIVE</span>
+            </li>
+            <li>
+              <span class="pw-phase" style="background:var(--color-amber);">2</span>
+              <span><strong>Comunidad:</strong> Red social + encuentros + eventos</span>
+            </li>
+            <li>
+              <span class="pw-phase" style="background:var(--color-coral);">3</span>
+              <span><strong>Conocimiento:</strong> Biblioteca + directorio veterinario</span>
+            </li>
+            <li>
+              <span class="pw-phase" style="background:#8B5CF6;">4</span>
+              <span><strong>Comercio:</strong> Marketplace + grooming + telemedicina</span>
+            </li>
+          </ul>
+        </div>
+        <div class="anim d3" style="max-width:600px;">
+          <div class="card" style="background:linear-gradient(135deg,#FEF3C7,#FFEDD5); border:1px solid var(--color-amber-light); text-align:center;">
+            <p style="font-size:0.92rem; font-weight:600; color:var(--color-earth); line-height:1.6;">
+              &#x1F4A1; Construir primero el nucleo de <strong>identidad + comunidad + conocimiento</strong>, y sumar comercio y telemedicina como capas posteriores.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 25: CIERRE ========== -->
+    <div class="slide" data-title="Cierre">
+      <div class="slide-inner flex-center flex-col gap-24">
+        <div class="closing-box anim" style="max-width:700px; width:100%;">
+          <div style="margin-bottom:16px;">
+            <img src="pngwing.com.png" alt="Huella" width="60" height="60" style="display:inline-block; filter:brightness(0) invert(1); opacity:0.9;" />
+          </div>
+          <h2 class="slide-title" style="font-size:clamp(1.4rem,3vw,2.2rem);">Gracias</h2>
+          <p style="font-size:clamp(0.9rem,1.6vw,1.1rem); opacity:0.9; margin-top:12px; line-height:1.6;">
+            El mercado de mascotas en Colombia y Manizales es una oportunidad solida, en crecimiento y con espacio para innovacion.
+          </p>
+          <div style="margin-top:24px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+            <span class="badge" style="background:rgba(255,255,255,0.2); color:#fff; font-size:0.8rem; padding:6px 16px;">$6,1B COP Nacional</span>
+            <span class="badge" style="background:rgba(255,255,255,0.2); color:#fff; font-size:0.8rem; padding:6px 16px;">$80.000M COP Manizales</span>
+            <span class="badge" style="background:rgba(255,255,255,0.2); color:#fff; font-size:0.8rem; padding:6px 16px;">>10% Crecimiento Anual</span>
+          </div>
+          <p style="margin-top:24px; font-size:0.85rem; opacity:0.7;">El Negocio de las Mascotas en Colombia y Manizales &mdash; 2026</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /deck -->
+
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================ -->
+  <script>
+    /* ----------------------------------------------------------
+       SLIDE ENGINE
+       ---------------------------------------------------------- */
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let current = 0;
+    let animating = false;
+    const ANIM_DURATION = 650;
+
+    const progressBar = document.getElementById('progress-bar');
+    const slideCounter = document.getElementById('slide-counter');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const indexToggle = document.getElementById('index-toggle');
+    const indexPanel = document.getElementById('index-panel');
+    const indexList = document.getElementById('index-list');
+
+    /* Build index */
+    slides.forEach((s, i) => {
+      const li = document.createElement('li');
+      li.textContent = s.dataset.title || ('Diapositiva ' + (i + 1));
+      li.addEventListener('click', function () { goTo(i); closeIndex(); });
+      indexList.appendChild(li);
+    });
+
+    function updateUI() {
+      slideCounter.textContent = (current + 1) + ' / ' + totalSlides;
+      progressBar.style.width = (((current + 1) / totalSlides) * 100) + '%';
+      var items = indexList.querySelectorAll('li');
+      for (var i = 0; i < items.length; i++) {
+        items[i].classList.toggle('active', i === current);
+      }
+      prevBtn.style.opacity = current === 0 ? '0.3' : '1';
+      prevBtn.style.pointerEvents = current === 0 ? 'none' : 'auto';
+      nextBtn.style.opacity = current === totalSlides - 1 ? '0.3' : '1';
+      nextBtn.style.pointerEvents = current === totalSlides - 1 ? 'none' : 'auto';
+    }
+
+    function goTo(index) {
+      if (index === current || index < 0 || index >= totalSlides || animating) return;
+      animating = true;
+
+      var direction = index > current ? 1 : -1;
+      var leaving = slides[current];
+      var entering = slides[index];
+
+      /* 1. Set up the leaving slide to animate out */
+      leaving.classList.add('animating');
+      leaving.style.transform = '';
+      leaving.style.opacity = '';
+
+      /* 2. Set up the entering slide at its start position (no transition yet) */
+      entering.classList.remove('active');
+      entering.classList.remove('animating');
+      entering.style.transform = direction > 0 ? 'translateX(80px)' : 'translateX(-80px)';
+      entering.style.opacity = '0';
+      entering.style.visibility = 'visible';
+
+      /* Force browser to register the start position */
+      void entering.offsetWidth;
+
+      /* 3. Now enable transitions on entering slide */
+      entering.classList.add('animating');
+
+      /* 4. Trigger the animations in the next frame */
+      requestAnimationFrame(function () {
+        /* Animate leaving slide out */
+        leaving.classList.remove('active');
+        leaving.style.transform = direction > 0 ? 'translateX(-80px)' : 'translateX(80px)';
+        leaving.style.opacity = '0';
+
+        /* Animate entering slide in */
+        entering.classList.add('active');
+        entering.style.transform = 'translateX(0)';
+        entering.style.opacity = '1';
+
+        current = index;
+        updateUI();
+        animateCounters();
+      });
+
+      /* 5. Clean up after animation finishes */
+      setTimeout(function () {
+        leaving.classList.remove('animating');
+        leaving.style.transform = '';
+        leaving.style.opacity = '';
+        leaving.style.visibility = '';
+
+        entering.classList.remove('animating');
+        entering.style.transform = '';
+        entering.style.opacity = '';
+        entering.style.visibility = '';
+
+        animating = false;
+      }, ANIM_DURATION + 50);
+    }
+
+    function goNext() { goTo(current + 1); }
+    function goPrev() { goTo(current - 1); }
+
+    /* Keyboard navigation */
+    document.addEventListener('keydown', function (e) {
+      if (indexPanel.classList.contains('open')) {
+        if (e.key === 'Escape' || e.key === 'i') closeIndex();
+        return;
+      }
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+        case ' ':
+        case 'PageDown':
+          e.preventDefault();
+          goNext();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+        case 'PageUp':
+          e.preventDefault();
+          goPrev();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goTo(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          goTo(totalSlides - 1);
+          break;
+        case 'i':
+          toggleIndex();
+          break;
+      }
+    });
+
+    /* Click navigation */
+    prevBtn.addEventListener('click', goPrev);
+    nextBtn.addEventListener('click', goNext);
+
+    /* Index panel */
+    function toggleIndex() { indexPanel.classList.toggle('open'); }
+    function closeIndex() { indexPanel.classList.remove('open'); }
+    indexToggle.addEventListener('click', toggleIndex);
+    indexPanel.addEventListener('click', function (e) {
+      if (e.target === indexPanel) closeIndex();
+    });
+
+    /* Touch / Swipe support */
+    var touchStartX = 0;
+    var touchStartY = 0;
+    document.addEventListener('touchstart', function (e) {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+    document.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].screenX - touchStartX;
+      var dy = e.changedTouches[0].screenY - touchStartY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+        if (dx < 0) goNext(); else goPrev();
+      }
+    }, { passive: true });
+
+    /* ----------------------------------------------------------
+       ANIMATED COUNTERS
+       ---------------------------------------------------------- */
+    function animateCounters() {
+      var activeSlide = slides[current];
+      var counters = activeSlide.querySelectorAll('[data-count]');
+      counters.forEach(function (el) {
+        if (el.dataset.animated === 'true') return;
+        el.dataset.animated = 'true';
+
+        var target = parseFloat(el.dataset.count);
+        var prefix = el.dataset.prefix || '';
+        var suffix = el.dataset.suffix || '';
+        var decimals = parseInt(el.dataset.decimals || '0');
+        var duration = 1200;
+        var start = performance.now();
+
+        function tick(now) {
+          var elapsed = now - start;
+          var progress = Math.min(elapsed / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          var value = (target * eased).toFixed(decimals);
+          el.textContent = prefix + value + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+    }
+
+    /* ----------------------------------------------------------
+       CHART.JS - National Donut Chart (Slide 3)
+       ---------------------------------------------------------- */
+    var chartNacional = null;
+    function initCharts() {
+      var ctx = document.getElementById('chart-nacional');
+      if (!ctx || chartNacional) return;
+
+      chartNacional = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: [
+            'Alimentos (55%)',
+            'Veterinaria (22%)',
+            'Accesorios (9%)',
+            'Grooming (6%)',
+            'Medicamentos (5%)',
+            'Serv. Emergentes (3%)'
+          ],
+          datasets: [{
+            data: [55, 22, 9, 6, 5, 3],
+            backgroundColor: [
+              '#F59E0B',
+              '#F97316',
+              '#22C55E',
+              '#FBBF24',
+              '#FB923C',
+              '#4ADE80'
+            ],
+            borderWidth: 3,
+            borderColor: '#FFFFFF',
+            hoverOffset: 12
+          }]
+        },
+        options: {
+          responsive: true,
+          cutout: '58%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#1C1917',
+              titleFont: { family: 'Poppins', size: 13 },
+              bodyFont: { family: 'Poppins', size: 12 },
+              padding: 12,
+              cornerRadius: 10,
+              callbacks: {
+                label: function (context) {
+                  var values = ['$3,35B', '$1,34B', '$549.000M', '$366.000M', '$305.000M', '$183.000M'];
+                  return ' ' + context.label + ': COP ' + values[context.dataIndex];
+                }
+              }
+            }
+          },
+          animation: { animateRotate: true, duration: 1200, easing: 'easeOutQuart' }
+        }
+      });
+    }
+
+    /* Initialize */
+    updateUI();
+    animateCounters();
+
+    /* Wait for Chart.js to load, then init */
+    (function waitForChartJS() {
+      if (typeof Chart !== 'undefined') { initCharts(); }
+      else { setTimeout(waitForChartJS, 100); }
+    })();
+
+    /* ----------------------------------------------------------
+       RANDOM SCATTERED PAW BACKGROUND
+       Loads the PNG, draws it at random positions/sizes/rotations
+       on a full-screen canvas with low opacity.
+       ---------------------------------------------------------- */
+    (function drawPawBackground() {
+      var canvas = document.getElementById('paw-bg');
+      var ctx = canvas.getContext('2d');
+      var img = new Image();
+      img.src = 'pngwing.com.png';
+
+      function render() {
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        var dpr = window.devicePixelRatio || 1;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, w, h);
+        ctx.globalAlpha = 0.035;
+
+        /* Seeded pseudo-random for consistent layout across reloads */
+        var seed = 42;
+        function rand() {
+          seed = (seed * 16807 + 0) % 2147483647;
+          return (seed - 1) / 2147483646;
+        }
+
+        /* Place paws in a grid with jitter for organic scatter */
+        var cellSize = 65;
+        var cols = Math.ceil(w / cellSize) + 1;
+        var rows = Math.ceil(h / cellSize) + 1;
+
+        for (var row = 0; row < rows; row++) {
+          for (var col = 0; col < cols; col++) {
+            /* Skip ~30% of cells for irregular density */
+            if (rand() < 0.30) continue;
+
+            var pawSize = 32;
+            var x = col * cellSize + rand() * (cellSize - pawSize);
+            var y = row * cellSize + rand() * (cellSize - pawSize);
+            var rotation = (rand() - 0.5) * 1.2;
+
+            ctx.save();
+            ctx.translate(x + pawSize / 2, y + pawSize / 2);
+            ctx.rotate(rotation);
+            ctx.drawImage(img, -pawSize / 2, -pawSize / 2, pawSize, pawSize);
+            ctx.restore();
+          }
+        }
+      }
+
+      img.onload = function () {
+        render();
+        window.addEventListener('resize', render);
+      };
+    })();
+  </script>
+
+</body>
+</html>

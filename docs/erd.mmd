@@ -1,0 +1,75 @@
+erDiagram
+    User {
+        string id PK "cuid"
+        string email UK "unique"
+        string passwordHash
+        string displayName
+        string phone "nullable"
+        string city "default: Manizales"
+        string consentVersion "nullable"
+        datetime consentTimestamp "nullable"
+        datetime createdAt
+        datetime updatedAt
+        datetime lastLoginAt "nullable"
+    }
+
+    Pet {
+        string id PK "cuid"
+        string ownerId FK "cascade delete"
+        string name
+        Species species "DOG | CAT | OTHER"
+        string breed "nullable"
+        datetime birthDate "nullable"
+        Sex sex "MALE | FEMALE | UNKNOWN"
+        float weightKg "nullable"
+        string avatarUrl "nullable"
+        string bio "nullable"
+        string tagId UK "cuid, unique - NFC/QR"
+        string ownerName "nullable - PawTag"
+        string ownerPhone "nullable - PawTag"
+        string altPhone "nullable - PawTag"
+        string allergies "nullable - medical"
+        string medications "nullable - medical"
+        string conditions "nullable - medical"
+        string vetName "nullable - medical"
+        string vetPhone "nullable - medical"
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    Session {
+        string id PK "cuid"
+        string userId FK "cascade delete"
+        string tokenHash UK "unique, SHA-256"
+        datetime expiresAt
+        datetime createdAt
+    }
+
+    ChatConversation {
+        string id PK "cuid"
+        string userId FK "nullable, cascade delete"
+        datetime createdAt
+    }
+
+    ChatMessage {
+        string id PK "cuid"
+        string conversationId FK "cascade delete"
+        ChatRole role "USER | ASSISTANT"
+        string content
+        datetime createdAt
+    }
+
+    PasswordResetToken {
+        string id PK "cuid"
+        string userId FK "cascade delete"
+        string tokenHash UK "unique, SHA-256"
+        datetime expiresAt
+        datetime usedAt "nullable - single use"
+        datetime createdAt
+    }
+
+    User ||--o{ Pet : "owns"
+    User ||--o{ Session : "has"
+    User ||--o{ ChatConversation : "starts"
+    User ||--o{ PasswordResetToken : "requests"
+    ChatConversation ||--o{ ChatMessage : "contains"

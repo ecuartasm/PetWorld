@@ -6,6 +6,7 @@ import { checkRateLimit } from "@/lib/rate-limit";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { z } from "zod";
+import { logRequest, logError } from "@/lib/logger";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,7 @@ export async function POST(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
   const { allowed } = checkRateLimit(ip);
   if (!allowed) {
+    logRequest("/api/chat", "POST", 429, { ip });
     return new Response(
       JSON.stringify({ error: "Demasiadas solicitudes. Intenta de nuevo en un minuto." }),
       { status: 429, headers: { "Content-Type": "application/json" } },
@@ -36,6 +38,7 @@ export async function POST(request: NextRequest) {
   // Validate API key exists
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
+    logRequest("/api/chat", "POST", 503, { error: "no_api_key" });
     return new Response(
       JSON.stringify({ error: "El asistente no esta disponible en este momento." }),
       { status: 503, headers: { "Content-Type": "application/json" } },
@@ -143,9 +146,11 @@ export async function POST(request: NextRequest) {
             }
           }
 
+          logRequest("/api/chat", "POST", 200, { ip, conversationId: savedConversationId });
           controller.enqueue(encoder.encode(`data: [DONE]\n\n`));
           controller.close();
         } catch (error) {
+          logError("/api/chat", "POST", error);
           console.error("Streaming error:", error);
           controller.enqueue(
             encoder.encode(
@@ -165,6 +170,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
+    logError("/api/chat", "POST", error);
     console.error("Anthropic API error:", error);
     return new Response(
       JSON.stringify({ error: "El asistente no esta disponible en este momento. Intenta de nuevo mas tarde." }),

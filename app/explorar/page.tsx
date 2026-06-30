@@ -28,7 +28,7 @@ export default function ExplorarPage() {
             Explora el Ecosistema PetWorld
           </h1>
           <p className="mt-2 text-lg text-white/90">
-            Descubre lo que estamos construyendo para las mascotas de Manizales
+            Descubre lo que estamos construyendo para las mascotas de Colombia
           </p>
         </div>
       </div>
@@ -72,7 +72,7 @@ export default function ExplorarPage() {
 
       {/* Floating "coming soon" badge */}
       <div className="fixed bottom-6 left-6 z-50 rounded-full bg-gradient-to-r from-gray-900 to-gray-700 px-5 py-2.5 text-sm font-medium text-white shadow-xl animate-pulse">
-        🚧 Proximamente en Manizales
+        🚧 Proximamente en Colombia
       </div>
     </div>
   );
@@ -93,12 +93,12 @@ function PawTagTab() {
   const plans = [
     { name: "PawTag Basico", price: "$29.900", desc: "Tag QR resistente al agua", features: ["Codigo QR grabado", "Perfil publico de tu mascota", "Contacto de emergencia", "Resistente al agua"], color: "from-gray-700 to-gray-900", popular: false },
     { name: "PawTag NFC", price: "$49.900", desc: "Tag NFC + QR premium", features: ["Chip NFC integrado", "Codigo QR de respaldo", "Info medica de emergencia", "Resistente y liviano", "Notificacion de escaneo"], color: "from-orange-500 to-red-600", popular: true },
-    { name: "PawTag Duo", price: "$79.900", desc: "Pack de 2 tags (collar + arnes)", features: ["2 tags NFC + QR", "Ideal para collar y arnes", "Todo lo del plan NFC", "Envio gratis en Manizales"], color: "from-purple-600 to-pink-600", popular: false },
+    { name: "PawTag Duo", price: "$79.900", desc: "Pack de 2 tags (collar + arnes)", features: ["2 tags NFC + QR", "Ideal para collar y arnes", "Todo lo del plan NFC", "Envio gratis en Colombia"], color: "from-purple-600 to-pink-600", popular: false },
   ];
 
   const steps = [
     { step: "1", title: "Crea el perfil de tu mascota", desc: "Registrate gratis y agrega los datos de tu mascota, contacto y info medica." },
-    { step: "2", title: "Recibe tu PawTag", desc: "Te enviamos el tag fisico a tu casa en Manizales. Listo para usar." },
+    { step: "2", title: "Recibe tu PawTag", desc: "Te enviamos el tag fisico a tu casa en Colombia. Listo para usar." },
     { step: "3", title: "Ponlo en el collar", desc: "Asegura el tag al collar o arnes de tu mascota. Listo, protegido." },
     { step: "4", title: "Quien lo encuentre, te llama", desc: "Si tu mascota se pierde, cualquiera puede escanear el tag y contactarte al instante." },
   ];
@@ -241,9 +241,9 @@ function PawTagTab() {
 
 function ConocimientoTab() {
   const articles = [
-    { category: "Nutricion", title: "Guia completa de alimentacion para perros en clima frio de Manizales", time: "8 min", color: "bg-green-100 text-green-700" },
+    { category: "Nutricion", title: "Guia completa de alimentacion para perros en clima frio colombiano", time: "8 min", color: "bg-green-100 text-green-700" },
     { category: "Salud", title: "Vacunacion en Colombia: calendario completo para perros y gatos 2026", time: "12 min", color: "bg-blue-100 text-blue-700" },
-    { category: "Comportamiento", title: "Como socializar a tu cachorro en una ciudad como Manizales", time: "6 min", color: "bg-purple-100 text-purple-700" },
+    { category: "Comportamiento", title: "Como socializar a tu cachorro en ciudades colombianas", time: "6 min", color: "bg-purple-100 text-purple-700" },
     { category: "Razas", title: "Razas ideales para apartamentos pequenos en zona cafetera", time: "10 min", color: "bg-amber-100 text-amber-700" },
     { category: "Cuidado Senior", title: "Artritis en perros mayores: como el clima frio afecta sus articulaciones", time: "7 min", color: "bg-red-100 text-red-700" },
     { category: "Primeros Auxilios", title: "Que hacer si tu mascota se intoxica con plantas comunes del eje cafetero", time: "5 min", color: "bg-orange-100 text-orange-700" },
@@ -309,9 +309,9 @@ function ConocimientoTab() {
 
 function VeterinarioTab() {
   const vets = [
-    { name: "Clinica Veterinaria La Manada", address: "Av. Santander #65-12, Manizales", rating: 4.8, reviews: 124, specialties: ["Cirugia", "Urgencias 24h"], phone: "606 887 2341" },
+    { name: "Clinica Veterinaria La Manada", address: "Av. Santander #65-12, Bogota", rating: 4.8, reviews: 124, specialties: ["Cirugia", "Urgencias 24h"], phone: "601 887 2341" },
     { name: "Hospital Veterinario del Cafe", address: "Cra 23 #48-15, Barrio Palermo", rating: 4.9, reviews: 89, specialties: ["Dermatologia", "Oncologia"], phone: "606 882 5567" },
-    { name: "VetPets Manizales", address: "Calle 59 #24-30, Centro", rating: 4.6, reviews: 203, specialties: ["Vacunacion", "Estetica"], phone: "606 884 1122" },
+    { name: "VetPets Colombia", address: "Calle 59 #24-30, Medellin", rating: 4.6, reviews: 203, specialties: ["Vacunacion", "Estetica"], phone: "604 884 1122" },
     { name: "Clinica Animal Care", address: "Cra 27 #72-05, Barrio Chipre", rating: 4.7, reviews: 67, specialties: ["Ortopedia", "Rehabilitacion"], phone: "606 881 9900" },
     { name: "Dr. Paws Centro Veterinario", address: "Av. Kevin Angel #15-42, Villamaria", rating: 4.5, reviews: 156, specialties: ["General", "Laboratorio"], phone: "606 886 3344" },
   ];
@@ -322,7 +322,7 @@ function VeterinarioTab() {
         <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-lg">🏥</div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Directorio Veterinario</h2>
-          <p className="text-sm text-gray-500">Encuentra las mejores veterinarias en Manizales</p>
+          <p className="text-sm text-gray-500">Encuentra las mejores veterinarias en Colombia</p>
         </div>
       </div>
 
@@ -330,7 +330,7 @@ function VeterinarioTab() {
       <div className="mb-6 h-48 rounded-xl bg-gradient-to-br from-emerald-100 to-teal-50 border-2 border-dashed border-emerald-300 flex items-center justify-center">
         <div className="text-center">
           <span className="text-4xl">🗺️</span>
-          <p className="mt-2 text-sm font-medium text-emerald-700">Mapa interactivo de Manizales</p>
+          <p className="mt-2 text-sm font-medium text-emerald-700">Mapa interactivo de Colombia</p>
           <p className="text-xs text-emerald-600">Proximamente con ubicaciones en tiempo real</p>
         </div>
       </div>
@@ -383,10 +383,10 @@ function VeterinarioTab() {
 
 function GroomingTab() {
   const services = [
-    { name: "Spa Canino Manizales", service: "Bano + Corte completo", price: "$45.000 - $80.000", rating: 4.9, img: "🐩", time: "2-3 horas" },
+    { name: "Spa Canino PetWorld", service: "Bano + Corte completo", price: "$45.000 - $80.000", rating: 4.9, img: "🐩", time: "2-3 horas" },
     { name: "PeluPets Express", service: "Bano medicado", price: "$35.000 - $55.000", rating: 4.7, img: "🛁", time: "1-2 horas" },
     { name: "Huellitas Grooming", service: "Corte de unas + Limpieza oidos", price: "$20.000 - $30.000", rating: 4.8, img: "✨", time: "30 min" },
-    { name: "Dog Fashion Manizales", service: "Spa premium + Aromaterapia", price: "$90.000 - $120.000", rating: 5.0, img: "👑", time: "3-4 horas" },
+    { name: "Dog Fashion Colombia", service: "Spa premium + Aromaterapia", price: "$90.000 - $120.000", rating: 5.0, img: "👑", time: "3-4 horas" },
     { name: "Guarderia Patitas", service: "Guarderia dia completo", price: "$25.000/dia", rating: 4.6, img: "🏠", time: "8 horas" },
     { name: "WalkDog Caldas", service: "Paseo grupal (1 hora)", price: "$15.000/paseo", rating: 4.5, img: "🦮", time: "1 hora" },
   ];
@@ -397,7 +397,7 @@ function GroomingTab() {
         <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-white text-lg">✂️</div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Grooming y Cuidado</h2>
-          <p className="text-sm text-gray-500">Banos, cortes, paseos y guarderia en Manizales</p>
+          <p className="text-sm text-gray-500">Banos, cortes, paseos y guarderia en Colombia</p>
         </div>
       </div>
 
@@ -524,7 +524,7 @@ function TelemedicinaTab() {
 
 function SocialTab() {
   const posts = [
-    { user: "Maria L.", pet: "Luna", breed: "Golden Retriever", content: "Paseando por el Parque Bicentenario esta manana 🌤️ Luna ama los dias soleados en Manizales!", likes: 34, comments: 8, time: "hace 2h" },
+    { user: "Maria L.", pet: "Luna", breed: "Golden Retriever", content: "Paseando por el parque esta manana 🌤️ Luna ama los dias soleados!", likes: 34, comments: 8, time: "hace 2h" },
     { user: "Carlos M.", pet: "Thor", breed: "Pastor Aleman", content: "Thor completo su curso de obediencia basica! Muy orgulloso de este campeon 🏆", likes: 56, comments: 12, time: "hace 4h" },
     { user: "Ana P.", pet: "Michi", breed: "Persa", content: "Michi descubriendo la ventana nueva... los gatos y su curiosidad infinita 😺", likes: 89, comments: 23, time: "hace 6h" },
     { user: "Juan D.", pet: "Rocky", breed: "Bulldog Frances", content: "Primer dia de Rocky en la guarderia de la Cra 23. Se porto increible!", likes: 41, comments: 5, time: "hace 8h" },
@@ -536,7 +536,7 @@ function SocialTab() {
         <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white text-lg">👥</div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Red Social PetWorld</h2>
-          <p className="text-sm text-gray-500">Conecta con la comunidad de mascotas de Manizales</p>
+          <p className="text-sm text-gray-500">Conecta con la comunidad de mascotas de Colombia</p>
         </div>
       </div>
 
@@ -700,7 +700,7 @@ function MarketplaceTab() {
       <div className="mb-6 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 p-5 text-white">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-cyan-100">Envio gratis en Manizales</p>
+            <p className="text-sm font-medium text-cyan-100">Envio gratis en Colombia</p>
             <p className="text-xl font-bold">En compras mayores a $80.000</p>
           </div>
           <span className="text-4xl animate-bounce">📦</span>
@@ -741,7 +741,7 @@ function MarketplaceTab() {
 function EventosTab() {
   const events = [
     { name: "CVDC 2026 — Congreso Veterinario de Colombia", date: "2026", location: "Colombia", type: "Profesional", free: false, attendees: 1200, url: "https://cvdc.com.co/" },
-    { name: "Feria de Adopcion Manizales 2026", date: "Sabado 21 Junio", location: "Parque Caldas", type: "Adopcion", free: true, attendees: 234, url: null },
+    { name: "Feria de Adopcion Colombia 2026", date: "Sabado 21 Junio", location: "Parque Nacional, Bogota", type: "Adopcion", free: true, attendees: 234, url: null },
     { name: "Congreso Veterinario del Eje Cafetero", date: "15-17 Julio", location: "Centro de Convenciones", type: "Profesional", free: false, attendees: 89, url: null },
     { name: "Caminata Canina por Chipre", date: "Domingo 28 Junio", location: "Mirador de Chipre", type: "Comunidad", free: true, attendees: 156, url: null },
     { name: "Taller de Primeros Auxilios para Mascotas", date: "Sabado 5 Julio", location: "Clinica Animal Care", type: "Educacion", free: false, attendees: 32, url: null },
@@ -764,7 +764,7 @@ function EventosTab() {
         <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center text-white text-lg">🎉</div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Eventos Pet-Friendly</h2>
-          <p className="text-sm text-gray-500">Ferias, talleres, caminatas y mas en Manizales y Colombia</p>
+          <p className="text-sm text-gray-500">Ferias, talleres, caminatas y mas en toda Colombia</p>
         </div>
       </div>
 

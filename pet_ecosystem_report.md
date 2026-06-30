@@ -403,6 +403,149 @@ Build the **pet identity + community + knowledge core** first, in one city, web-
 
 ---
 
+## 14. Current implementation — Explorar page
+
+The `/explorar` page is a client-side interactive showcase of the full PetWorld ecosystem vision. It contains **9 tabs**, each presenting a different pillar as a rich, mockup-driven preview of what is coming. All content is localized to Manizales and displayed in Spanish. This section documents each tab.
+
+### 14.1 PawTag (Identity tag)
+
+The only tab with **production-ready features** behind it. Showcases the NFC + QR physical tag for lost-pet recovery.
+
+- **Hero section** — explains the value proposition: "Nunca pierdas a tu mejor amigo."
+- **How it works** — 4-step flow: create profile, receive tag, attach to collar, anyone can scan and call.
+- **6 features** — NFC + QR, instant contact button, emergency medical info, privacy controls, works without app, unlimited updates.
+- **3 pricing plans** (COP):
+  - PawTag Basico ($29.900) — QR only, waterproof.
+  - PawTag NFC ($49.900) — NFC + QR, medical info, scan notifications. Marked as "Mas popular."
+  - PawTag Duo ($79.900) — 2 NFC+QR tags (collar + harness), free shipping in Manizales.
+- **Demo mockup** — simulates what someone sees when scanning a tag (pet name, breed, call button, medical alerts).
+
+### 14.2 Conocimiento (Knowledge hub)
+
+A content library preview with article cards and category filters.
+
+- **Search bar** (disabled mockup) for articles, guides, breeds.
+- **Category pills**: Nutricion, Salud, Comportamiento, Razas, Grooming, Primeros Auxilios.
+- **6 sample articles** localized to Manizales/Eje Cafetero climate and context:
+  - Feeding guide for cold-climate Manizales dogs
+  - 2026 vaccination calendar for Colombia
+  - Puppy socialization in Manizales
+  - Apartment-friendly breeds for zona cafetera
+  - Arthritis in senior dogs and cold climate
+  - First aid for toxic plants of the Eje Cafetero
+
+### 14.3 Veterinarias (Vet directory)
+
+Local vet clinic discovery with a map placeholder and clinic listings.
+
+- **Map placeholder** — "Mapa interactivo de Manizales" (coming soon).
+- **Specialty filters**: Urgencias 24h, Cirugia, Dermatologia, Vacunacion, Exoticos.
+- **5 vet clinic cards** with Manizales addresses, ratings (4.5-4.9), review counts, specialties, call/profile buttons:
+  - Clinica Veterinaria La Manada (Cirugia, Urgencias 24h)
+  - Hospital Veterinario del Cafe (Dermatologia, Oncologia)
+  - VetPets Manizales (Vacunacion, Estetica)
+  - Clinica Animal Care (Ortopedia, Rehabilitacion)
+  - Dr. Paws Centro Veterinario (General, Laboratorio)
+
+### 14.4 Grooming (Grooming & care services)
+
+Service discovery for grooming, walking, daycare.
+
+- **4 service categories** with counts: Bano (12), Peluqueria (8), Paseos (15), Guarderia (6).
+- **6 provider cards** with service type, price range (COP), ratings, and estimated time:
+  - Spa Canino Manizales — Bano + Corte ($45K-$80K)
+  - PeluPets Express — Bano medicado ($35K-$55K)
+  - Huellitas Grooming — Unas + Oidos ($20K-$30K)
+  - Dog Fashion Manizales — Spa premium + Aromaterapia ($90K-$120K)
+  - Guarderia Patitas — Full day daycare ($25K/dia)
+  - WalkDog Caldas — Group walk ($15K/paseo)
+
+### 14.5 Telemedicina (Veterinary telemedicine)
+
+Remote vet consultations by video.
+
+- **3-step flow**: Choose vet, schedule appointment, connect by video.
+- **Disclaimer**: "La telemedicina es para orientacion, seguimiento y segundas opiniones. Para emergencias, acude a una clinica presencial."
+- **4 doctor cards** with specialty, experience, availability status, and per-consult pricing:
+  - Dra. Carolina Gomez — Medicina interna, 12 anos ($35K)
+  - Dr. Andres Rios — Dermatologia, 8 anos ($40K)
+  - Dra. Valentina Cardona — Nutricion, 6 anos ($30K) — not available
+  - Dr. Felipe Ocampo — Comportamiento/etologia, 10 anos ($45K)
+
+### 14.6 Red Social (Pet social network)
+
+Instagram-style feed mockup centered on pets.
+
+- **Stories bar** — 7 pet stories (Luna, Milo, Rocky, Kira, Simba, Max, Nala) with circular avatars.
+- **4 post cards** from Manizales users with pet-centric content:
+  - Luna (Golden Retriever) walking at Parque Bicentenario — 34 likes, 8 comments
+  - Thor (Pastor Aleman) completed obedience training — 56 likes, 12 comments
+  - Michi (Persa) cat curiosity post — 89 likes, 23 comments
+  - Rocky (Bulldog Frances) first day at daycare on Cra 23 — 41 likes, 5 comments
+- **Interactions**: like, comment, share buttons per post.
+
+### 14.7 Encuentros (Playdate matching)
+
+Tinder-style playdate/socialization matching for dogs.
+
+- **4 filter controls** (disabled mockup): Tamano, Energia, Distancia (<3km), Vacunado.
+- **4 match cards** with pet name, breed, age, energy level, size, distance, and temperament description:
+  - Lola (Labrador, 2 anos, 1.2km) — "Juguetona y sociable"
+  - Toby (Schnauzer, 3 anos, 0.8km) — "Tranquilo y amigable"
+  - Canela (Criolla, 1 ano, 2.1km) — "Energica y curiosa"
+  - Bruno (Beagle, 4 anos, 1.5km) — "Social y olfateador"
+- **Action buttons**: "Quiero conocerlo!" (match) and "Pasar" (skip).
+
+### 14.8 Marketplace (Product marketplace)
+
+E-commerce mockup for local/independent pet product brands.
+
+- **8 category pills**: Alimento, Snacks, Juguetes, Cuidado, Accesorios, Tecnologia, Medicinas.
+- **Promo banner**: Free shipping in Manizales on orders >$80K.
+- **6 product cards** with name, brand, price, old price (if on sale), category, rating:
+  - Ringo Cachorros Premium Food — $89.900 (was $99.900)
+  - PetComfort CO Orthopedic Bed — $149.000
+  - Huellitas Home Grooming Kit — $65.000 (was $78.000)
+  - TrackPet GPS Collar — $189.000
+  - NaturPet Caldas Chicken Snacks — $22.900 (was $27.000)
+  - Kong Classic Interactive Toy — $54.000
+
+### 14.9 Eventos (Pet-friendly events)
+
+Event calendar and discovery for Manizales and Colombia.
+
+- **Featured event**: CVDC 2026 (Congreso Veterinario de Colombia) — prominent card linking to cvdc.com.co with gradient banner.
+- **Calendar visual** — June-July 2026 grid with highlighted event dates.
+- **Event type filters**: Adopcion, Comunidad, Educacion, Profesional, Festival, Salud.
+- **7 event cards** with name, date, location, type badge, free/paid indicator, and attendee count:
+  - CVDC 2026 — Congreso Veterinario de Colombia (1,200 attendees)
+  - Feria de Adopcion Manizales (Parque Caldas, free, 234)
+  - Congreso Veterinario del Eje Cafetero (Centro de Convenciones, 89)
+  - Caminata Canina por Chipre (Mirador de Chipre, free, 156)
+  - Taller de Primeros Auxilios (Clinica Animal Care, 32)
+  - Festival Pet-Friendly Coffee (Recinto del Pensamiento, 412)
+  - Jornada de Vacunacion Gratuita (Coliseo Mayor, free, 567)
+
+---
+
+### Implementation status summary
+
+| Tab | Status | Backend support | Notes |
+|-----|--------|----------------|-------|
+| PawTag | **Functional** | Full CRUD, public profile at `/p/[tagId]`, NFC write | Only tab with real data flow |
+| Conocimiento | Mockup | None | Static article cards |
+| Veterinarias | Mockup | None | Static vet listings |
+| Grooming | Mockup | None | Static service cards |
+| Telemedicina | Mockup | None | Static doctor cards, disclaimer present |
+| Red Social | Mockup | None | Static feed with stories |
+| Encuentros | Mockup | None | Static match cards |
+| Marketplace | Mockup | None | Static product cards |
+| Eventos | Mockup | CVDC link is live | Static event cards, real external link |
+
+All mockup tabs serve as an **interactive product roadmap** — they communicate the ecosystem vision to early users while the corresponding backend features are built out in subsequent phases.
+
+---
+
 ## Appendix A — Module-to-phase matrix
 
 | Module | Phase | Operating cost | Differentiation | Regulatory load |

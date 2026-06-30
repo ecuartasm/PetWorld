@@ -1,6 +1,6 @@
 # PetWorld
 
-**El hogar digital de tu mascota** - Plataforma web para mascotas en Colombia, lanzando en Manizales.
+**El hogar digital de tu mascota** - Plataforma web para mascotas en Colombia.
 
 ## Stack
 
